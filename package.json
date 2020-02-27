@@ -1,0 +1,27 @@
+{
+  "name": "mangadex-scraper-gui",
+  "version": "1.0.0",
+  "description": "MangaDex scraper with GUI",
+  "main": "main.js",
+  "dependencies": {
+    "electron": "^8.0.2",
+    "mangadex-api": "^2.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hernikplays/mangadex-scraper-gui.git"
+  },
+  "keywords": [
+    "mangadex"
+  ],
+  "author": "hernikplays",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/hernikplays/mangadex-scraper-gui/issues"
+  },
+  "homepage": "https://github.com/hernikplays/mangadex-scraper-gui#readme"
+}

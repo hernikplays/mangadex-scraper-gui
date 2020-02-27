@@ -1,17 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="UTF-8">
-    <title>MangaDex Scraper</title>
+    <title>MangaDex Scraper by hernikplays</title>
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
-  </head>
-  <body>
+</head>
+
+<body>
     <h1>MangaDex GUI Scraper</h1>
     <h2>Made by hernikplays</h2>
-    <input type="text" name="theid" id="theid">
-    <input type="text" name="folder" id="folder">
-    <button type="submit" id="submit" onclick="scrape(document.getElementById('theid').value)">Submit</button>
-    
+    <div id="values">
+        <p>Manga ID</p>
+        <input type="text" name="theid" id="theid" placeholder="E.g.: 22723">
+        <p>File Path</p>
+        <input type="text" name="folder" id="folder" placeholder="C:/Users/You/Documents">
+        <p>What to download</p>
+        <select id="selop">
+            <option value="all">All chapters available</option>
+            <option value="ch">Single Chapter</option>
+            <option value="vol">Single Volume</option>
+        </select>
+        <button type="submit" id="submit"
+            onclick="scrape(document.getElementById('theid').value,document.getElementById('folder').value)">Scrape</button>
+    </div>
+    <div id="info" style="display: none">
+        <img id="cover" src="" width=20%>
+        <div id="ge">
+            <p id="label">Name: </p>
+            <p id="name"></p>
+        </div>
+
+    </div>
     <script src="assets/js/script.js"></script>
-  </body>
+</body>
+
 </html>
