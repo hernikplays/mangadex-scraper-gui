@@ -15,11 +15,12 @@
         <input type="text" name="theid" id="theid" placeholder="E.g.: 22723">
         <p>File Path</p>
         <input type="text" name="folder" id="folder" placeholder="C:/Users/You/Documents">
+        <p>Language:</p>
+        <input type="text" name="lang" id="lang" placeholder="E.g.: English, French, Polish etc.">
         <p>What to download</p>
         <select id="selop">
             <option value="all">All chapters available</option>
             <option value="ch">Single Chapter</option>
-            <option value="vol">Single Volume</option>
         </select>
         <button type="submit" id="submit"
             onclick="scrape(document.getElementById('theid').value,document.getElementById('folder').value)">Scrape</button>
