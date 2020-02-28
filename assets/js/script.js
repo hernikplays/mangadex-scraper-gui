@@ -43,7 +43,9 @@ function scrape(id, filePath) {
 }
 
 function doSetTimeout(chaps, i){
-    setTimeout(getChap,1000,chaps,i)
+    setTimeout(function(){
+        console.log(i)
+    },2000)
 }
 
 function getChap(chaps, ind){
