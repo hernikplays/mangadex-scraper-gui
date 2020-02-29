@@ -6,6 +6,17 @@ const fs = require('fs')
 document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
 
+function sleep(milliseconds) {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+      currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
+  }
+  
+
+
+  
 function scrape(id, filePath) {
     Mangadex.getManga(id).then(({
         manga,
@@ -30,7 +41,12 @@ function scrape(id, filePath) {
             console.log(chaps)
             let path = filePath.replace("/", "\\")
             for (var i = 0; i < chaps.length; i++) {
-                doSetTimeout(chaps, i) //dont spam API
+                
+                Mangadex.getChapter(chaps[i].id).then(chapter => {
+                    console.log(chapter)
+                  })
+                sleep(3000)
+                console.log("Done sleeping...")
             }
 
         }
@@ -48,11 +64,7 @@ function doSetTimeout(chaps, i){
     },2000)
 }
 
-function getChap(chaps, ind){
-    Mangadex.getChapter(chaps[ind].id).then(chapter => {
-        console.log(chapter)
-      })
-}
+
 
 /*
  if (chaps[i].volume == "" || chaps[i].chapter == "") {
