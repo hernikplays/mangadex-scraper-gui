@@ -6,16 +6,14 @@ const fs = require('fs')
 document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
 
-function sleep(milliseconds) {
+function sleep(ms) { //thx to https://www.sitepoint.com/delay-sleep-pause-wait/
     const date = Date.now();
     let currentDate = null;
     do {
       currentDate = Date.now();
-    } while (currentDate - date < milliseconds);
+    } while (currentDate - date < ms);
   }
   
-
-
   
 function scrape(id, filePath) {
     Mangadex.getManga(id).then(({
