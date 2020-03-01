@@ -5,14 +5,14 @@ const fs = require('fs')
 
 document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
-  
-  
+
+
 function scrape(id, filePath) {
     Mangadex.getManga(id).then(({
         manga,
         chapter
     }) => {
-        console.log(JSON.stringify(chapter[0]))
+        console.log(chapter[0])
         var cover = manga.cover_url.replace("cdndex.com", "mangadex.org") //bad link in api, replace it with right
         document.getElementById("cover").src = cover;
         document.getElementById("name").innerHTML = manga.title
@@ -31,10 +31,9 @@ function scrape(id, filePath) {
             console.log(chaps)
             var path = filePath.replace("/", "\\")
             for (var i = 0; i < chaps.length; i++) {
-                
-                Mangadex.getChapter(chaps[i].id).then(chapter => {
-                    console.log(chapter)
-                  })
+                    Mangadex.getChapter(chaps[i].id).then(chapter => {
+                        console.log(chapter)
+                    })
             }
 
         }
