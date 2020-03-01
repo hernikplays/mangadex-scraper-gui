@@ -5,14 +5,6 @@ const fs = require('fs')
 
 document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
-
-function sleep(ms) { //thx to https://www.sitepoint.com/delay-sleep-pause-wait/
-    const date = Date.now();
-    let currentDate = null;
-    do {
-      currentDate = Date.now();
-    } while (currentDate - date < ms);
-  }
   
   
 function scrape(id, filePath) {
@@ -20,8 +12,8 @@ function scrape(id, filePath) {
         manga,
         chapter
     }) => {
-        console.log(chapter)
-        let cover = manga.cover_url.replace("cdndex.com", "mangadex.org") //bad link in api, replace it with right
+        console.log(JSON.stringify(chapter[0]))
+        var cover = manga.cover_url.replace("cdndex.com", "mangadex.org") //bad link in api, replace it with right
         document.getElementById("cover").src = cover;
         document.getElementById("name").innerHTML = manga.title
         document.getElementById("info").style.display = "contents"; //show info
@@ -37,14 +29,12 @@ function scrape(id, filePath) {
             }
 
             console.log(chaps)
-            let path = filePath.replace("/", "\\")
+            var path = filePath.replace("/", "\\")
             for (var i = 0; i < chaps.length; i++) {
                 
                 Mangadex.getChapter(chaps[i].id).then(chapter => {
                     console.log(chapter)
                   })
-                sleep(3000)
-                console.log("Done sleeping...")
             }
 
         }
@@ -56,11 +46,6 @@ function scrape(id, filePath) {
 
 }
 
-function doSetTimeout(chaps, i){
-    setTimeout(function(){
-        console.log(i)
-    },2000)
-}
 
 
 
