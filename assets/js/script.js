@@ -6,6 +6,31 @@ const fs = require('fs')
 document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
 
+function loop (chaps,path,manga) {  
+    var i=0;
+    setTimeout(function () {
+        let group = chaps[i].group_name
+        Mangadex.getChapter(chaps[i].id).then(chapter => {
+            console.log(manga)
+            chapter.page_array.forEach(function (link, index, array) { //download each page of chapter
+                //console.log(item)
+                if (chapter.volume == "" && chapter.chapter == "") {
+                    dlChap("??", "??", link, index + 1, manga, path, chapter.group)
+                } else if (chapter.volume == "" && chapter.volume !== "") {
+                    dlChap("??", chapter.chapter, link, index + 1, manga, path, chapter.group)
+                } else if (chapter.volume !== "" && chapter.volume == "") {
+                    dlChap(chapter.volume, "??", link, index + 1, manga, path, chapter.group)
+                } else {
+                    dlChap(chapter.volume, chapter.chapter, link, index + 1, manga, path, group)
+                }
+            }, chapter, manga, path,group);
+        })          //  your code here
+       i++;                     //  increment the counter
+       if (i < chaps.length) {            //  if the counter < 10, call the loop function
+          loop();             //  ..  again which will trigger another 
+       }                        //  ..  setTimeout()
+    }, 3000,chaps,path,manga)
+ }
 
 function scrape(id, filePath) {
     Mangadex.getManga(id).then(({
@@ -31,25 +56,8 @@ function scrape(id, filePath) {
 
             console.log(chaps)
             var path = filePath.replace("/", "\\")
-            for (var i = 0; i < chaps.length; i++) { //for every chapter it fetches from API the link to images
-                let group = chaps[i].group_name
-                Mangadex.getChapter(chaps[i].id).then(chapter => {
-                    console.log(manga)
-                    chapter.page_array.forEach(function (link, index, array) { //download each page of chapter
-                        //console.log(item)
-                        if (chapter.volume == "" && chapter.chapter == "") {
-                            dlChap("??", "??", link, index + 1, manga, path, chapter.group)
-                        } else if (chapter.volume == "" && chapter.volume !== "") {
-                            dlChap("??", chapter.chapter, link, index + 1, manga, path, chapter.group)
-                        } else if (chapter.volume !== "" && chapter.volume == "") {
-                            dlChap(chapter.volume, "??", link, index + 1, manga, path, chapter.group)
-                        } else {
-                            dlChap(chapter.volume, chapter.chapter, link, index + 1, manga, path, group)
-                        }
-                    }, chapter, manga, path,group);
-                })
-                break;
-            }
+            
+            loop(chaps,path,manga)
 
         }
 
