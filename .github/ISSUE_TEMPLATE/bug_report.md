@@ -21,5 +21,5 @@ If applicable, add screenshots to help explain your problem.
 
 **Additional Info:**
  - OS: [e.g. Windows 10]
- - Logs from console (Ctrl+Shift+I)
+ - Logs from console (F12 or Debug > Dev Tools)
  - Anything else:
