@@ -32,7 +32,6 @@ p {
 
 button {
     background-color: #FF773D;
-    ;
     border: none;
     color: white;
     padding: 5px 15px;
@@ -43,7 +42,14 @@ button {
     margin-top: 20px;
     border-radius: 5px;
 }
-
+button:hover {
+    background-color:#cc5f30;; 
+    color: white;
+}
+button:active {
+    background-color:#7f3b1e; 
+    color: white;
+}
 input {
     width: 30%;
     padding: 12px 20px;
@@ -53,14 +59,4 @@ input {
     border-radius: 4px;
     box-sizing: border-box;
     font-family: 'Ubuntu', sans-serif;
-}
-
-select{
-    width: 200px;
-    height: 50px;
-    font-family: 'Ubuntu', sans-serif;
-}
-
-#label{
-    margin-bottom:-10px;
 }
