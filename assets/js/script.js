@@ -1,7 +1,7 @@
 const Mangadex = require("mangadex-api")
 const https = require('https');
 const fs = require('fs')
-
+const request = require('request');
 
 document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
@@ -76,25 +76,23 @@ function scrape(id, filePath) {
 function dlChap(vol, chap, link, pos, manga, path, group) { //download function
     console.log(`Vol. ${vol} - Chap. ${chap} page number ${pos} at ${link}`)
 
-    let mangatitle = manga.title.replace(/[/\\?%*:|"<>]/g, '')
-    if (!fs.existsSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`)) {
-        fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`, {
-            recursive: true
-        })
-    }
-    if (pos <= 9) {
-        const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\0${pos}.${link.split('.').pop()}`);
-        const request = https.get(link, function (response) {
-            response.pipe(file);
-            return console.log("done")
-        });
-    } else {
-        const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\${pos}.${link.split('.').pop()}`);
-        const request = https.get(link, function (response) {
-            response.pipe(file);
-            return console.log("done")
-        });
-    }
+    setTimeout(function () {
+        let mangatitle = manga.title.replace(/[/\\?%*:|"<>]/g, '')
+        if (!fs.existsSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`)) {
+            fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`, {
+                recursive: true
+            })
+        }
+        if (pos <= 9) {
+            const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\0${pos}.${link.split('.').pop()}`);
+            request(link).pipe(file)
+            return console.log("Downloaded")
+        } else {
+            const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\${pos}.${link.split('.').pop()}`);
+            request(link).pipe(file)
+            return console.log("Downloaded")
+        }
+    }, 2000)
 
 
 }

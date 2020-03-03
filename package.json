@@ -4,7 +4,8 @@
   "description": "MangaDex scraper with GUI",
   "main": "main.js",
   "dependencies": {
-    "mangadex-api": "^2.0.2"
+    "mangadex-api": "^2.0.2",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "electron": "^8.0.2",

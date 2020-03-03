@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, Menu } = require('electron')
 
 function createWindow () {
   const win = new BrowserWindow({
@@ -9,9 +9,23 @@ function createWindow () {
     }
   })
 
+  var menu = Menu.buildFromTemplate([
+    {
+      label: "Debug",
+      submenu: [
+        {
+          label: "Toggle Dev Tools",
+          accelerator: "F12",
+          click: () => {
+            win.webContents.toggleDevTools();
+          }
+        }
+      ]
+    }
+  ])
   win.loadFile('index.html')
 
-  win.setMenu(null)
+  win.setMenu(menu)
   // Open the DevTools.
   //win.webContents.openDevTools()
 }
