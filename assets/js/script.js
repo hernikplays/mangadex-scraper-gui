@@ -5,32 +5,34 @@ const fs = require('fs')
 
 document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
+var i = 0;
+var unkChap = 1;
 
-function loop (chaps,path,manga) {  
-    var i=0;
+function loop(chaps, path, manga) {
+
     setTimeout(function () {
         let group = chaps[i].group_name
         Mangadex.getChapter(chaps[i].id).then(chapter => {
-            console.log(manga)
+            //console.log(manga)
             chapter.page_array.forEach(function (link, index, array) { //download each page of chapter
-                //console.log(item)
+                console.log(chaps[i - 1])
                 if (chapter.volume == "" && chapter.chapter == "") {
-                    dlChap("??", "??", link, index + 1, manga, path, chapter.group)
+                    dlChap("Unknown", chapter.title, link, index + 1, manga, path, chapter.group)
                 } else if (chapter.volume == "" && chapter.volume !== "") {
-                    dlChap("??", chapter.chapter, link, index + 1, manga, path, chapter.group)
+                    dlChap("Unknown", chapter.chapter, link, index + 1, manga, path, chapter.group)
                 } else if (chapter.volume !== "" && chapter.volume == "") {
-                    dlChap(chapter.volume, "??", link, index + 1, manga, path, chapter.group)
+                    dlChap(chapter.volume, chapter.title, link, index + 1, manga, path, chapter.group)
                 } else {
                     dlChap(chapter.volume, chapter.chapter, link, index + 1, manga, path, group)
                 }
-            }, chapter, manga, path,group);
-        })          //  your code here
-       i++;                     //  increment the counter
-       if (i < chaps.length) {            //  if the counter < 10, call the loop function
-          loop();             //  ..  again which will trigger another 
-       }                        //  ..  setTimeout()
-    }, 3000,chaps,path,manga)
- }
+            }, );
+        })
+        i++;
+        if (i < chaps.length) {
+            loop(chaps, path, manga);
+        }
+    }, 3000, chaps, path, manga)
+}
 
 function scrape(id, filePath) {
     Mangadex.getManga(id).then(({
@@ -56,8 +58,7 @@ function scrape(id, filePath) {
 
             console.log(chaps)
             var path = filePath.replace("/", "\\")
-            
-            loop(chaps,path,manga)
+            loop(chaps, path, manga)
 
         }
 
@@ -70,25 +71,27 @@ function scrape(id, filePath) {
 
 function dlChap(vol, chap, link, pos, manga, path, group) { //download function
     console.log(`Vol. ${vol} - Chap. ${chap} page number ${pos} at ${link}`)
-    let mangatitle = manga.title.replace(/[/\\?%*:|"<>]/g, '')
-    if (!fs.existsSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`)) {
-        fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`, {
-            recursive: true
-        })
-    }
-    if (pos <= 9) {
-        const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\0${pos}.${link.split('.').pop()}`);
-        const request = https.get(link, function (response) {
-            response.pipe(file);
-            console.log("done")
-        });
-    } else {
-        const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\${pos}.${link.split('.').pop()}`);
-        const request = https.get(link, function (response) {
-            response.pipe(file);
-            console.log("done")
-        });
-    }
-}
+    
+        let mangatitle = manga.title.replace(/[/\\?%*:|"<>]/g, '')
+        if (!fs.existsSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`)) {
+            fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`, {
+                recursive: true
+            })
+        } 
+        if (pos <= 9) {
+            const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\0${pos}.${link.split('.').pop()}`);
+            const request = https.get(link, function (response) {
+                await response.pipe(file);
+                return console.log("done")
+            });
+        } else {
+            const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\${pos}.${link.split('.').pop()}`);
+            const request = https.get(link, function (response) {
+                await response.pipe(file);
+                return console.log("done")
+            });
+        }
+    
 
+}
 
