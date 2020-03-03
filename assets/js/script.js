@@ -85,14 +85,14 @@ function dlChap(vol, chap, link, pos, manga, path, group) { //download function
         }
         if (pos <= 9) {
             const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\0${pos}.${link.split('.').pop()}`);
-            request(link).pipe(file)
+            request(link).pipe(file).on('error', function(err){console.error(err)}).on('clientError', function(err){console.error(err)})
             return console.log("Downloaded")
         } else {
             const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\${pos}.${link.split('.').pop()}`);
             request(link).pipe(file)
             return console.log("Downloaded")
         }
-    }, 50000)
+    }, 3000)
 
 
 }
