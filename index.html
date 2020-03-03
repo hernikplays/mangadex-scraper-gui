@@ -8,32 +8,34 @@
 </head>
 
 <body>
-    <h1>MangaDex GUI Scraper</h1>
-    <h2>Made by hernikplays</h2>
-    <div id="values">
-        <p>Manga ID</p>
-        <input type="text" name="theid" id="theid" placeholder="E.g.: 22723">
-        <p>File Path</p>
-        <input type="text" name="folder" id="folder" placeholder="C:/Users/You/Documents">
-        <p>Language:</p>
-        <input type="text" name="lang" id="lang" placeholder="E.g.: English, French, Polish etc.">
-        <p>What to download</p>
-        <select id="selop">
-            <option value="all">All chapters available</option>
-            <option value="ch">Single Chapter</option>
-        </select>
-        <button type="submit" id="submit"
-            onclick="scrape(document.getElementById('theid').value,document.getElementById('folder').value)">Scrape</button>
-    </div>
-    <div id="info" style="display: none">
-        <img id="cover" src="" width=20%>
-        <div id="ge">
-            <p id="label">Name: </p>
-            <p id="name"></p>
+    <div id="content">
+        <h1>MangaDex GUI Scraper</h1>
+        <h2>Made by hernikplays</h2>
+        <div id="values">
+            <p>Manga ID</p>
+            <input type="text" name="theid" id="theid" placeholder="E.g.: 22723">
+            <p>File Path</p>
+            <input type="text" name="folder" id="folder" placeholder="C:/Users/You/Documents">
+            <p>Language:</p>
+            <input type="text" name="lang" id="lang" placeholder="E.g.: English, French, Polish etc.">
+            <p>What to download</p>
+            <select id="selop">
+                <option value="all">All chapters available</option>
+                <option value="ch">Single Chapter</option>
+            </select>
+            <button type="submit" id="submit"
+                onclick="scrape(document.getElementById('theid').value,document.getElementById('folder').value)">Scrape</button>
         </div>
+        <div id="info" style="display: none">
+            <img id="cover" src="" width=20%>
+            <div id="ge">
+                <p id="label">Name: </p>
+                <p id="name"></p>
+            </div>
 
+        </div>
+        <script src="assets/js/script.js"></script>
     </div>
-    <script src="assets/js/script.js"></script>
 </body>
 
 </html>
