@@ -3,23 +3,55 @@
     
 }
 body {
-    background-color: #18345c;
+    background-color: #272932;
+    font-family: 'Oswald', sans-serif;
+
   }
   
   h1 {
     color:  whitesmoke;
     text-align: center;
-    font-family: verdana;
+    font-size: 30px;
+    font-weight: bold;
+    
   }
   h2{
     color: whitesmoke;
-    font-family: verdana;
+    font-family: 'Ubuntu', sans-serif;
+    
   }
   p {
-    color: whitesmoke;
-    font-family: verdana;
-    font-size: 20px;
+    color: #FF773D;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 18x;
+    font-weight: bolder;
   }
   button{
-      border-radius: 4px;
+        background-color: #FF773D;; 
+        border: none;
+        color:white;
+        padding: 5px 15px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-top: 20px;
+        border-radius: 5px;
   }
+         
+  input{
+    width: 30%;
+    padding: 12px 20px;
+    margin-top: -10px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: 'Ubuntu', sans-serif;
+  }
+  custom-select {
+    position: relative;
+    font-family: Arial;
+  }
+
+ 
