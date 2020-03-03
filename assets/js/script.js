@@ -73,10 +73,10 @@ function scrape(id, filePath) {
 
 }
 
-function dlChap(vol, chap, link, pos, manga, path, group) { //download function
+async function dlChap(vol, chap, link, pos, manga, path, group) { //download function
     console.log(`Vol. ${vol} - Chap. ${chap} page number ${pos} at ${link}`)
 
-    setTimeout(function () {
+
         let mangatitle = manga.title.replace(/[/\\?%*:|"<>]/g, '')
         if (!fs.existsSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`)) {
             fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`, {
@@ -85,14 +85,15 @@ function dlChap(vol, chap, link, pos, manga, path, group) { //download function
         }
         if (pos <= 9) {
             const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\0${pos}.${link.split('.').pop()}`);
-            request(link).pipe(file).on('error', function(err){console.error(err)}).on('clientError', function(err){console.error(err)})
+            dlTO(file,link)
             return console.log("Downloaded")
         } else {
             const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\${pos}.${link.split('.').pop()}`);
-            request(link).pipe(file)
+            dlTO(file,link)
+            
             return console.log("Downloaded")
         }
-    }, 3000)
+
 
 
 }
@@ -103,4 +104,17 @@ function change(value) {
     } else {
         document.getElementById("numb").style.display = "contents";
     }
+}
+
+function dlTO(file,link){
+    setTimeout(async function(){
+        console.log("timeout")
+        await new Promise(resolve =>
+            request(link)
+              .pipe(file)
+              .on('error', function(err){console.error(err)})
+              .on('clientError', function(err){console.error(err)})
+              .on('finish', resolve)
+              );
+    }, 10000)
 }
