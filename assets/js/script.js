@@ -6,7 +6,6 @@ const fs = require('fs')
 document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
 var i = 0;
-var unkChap = 1;
 
 function loop(chaps, path, manga) {
 
@@ -81,13 +80,13 @@ function dlChap(vol, chap, link, pos, manga, path, group) { //download function
         if (pos <= 9) {
             const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\0${pos}.${link.split('.').pop()}`);
             const request = https.get(link, function (response) {
-                await response.pipe(file);
+                 response.pipe(file);
                 return console.log("done")
             });
         } else {
             const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\${pos}.${link.split('.').pop()}`);
             const request = https.get(link, function (response) {
-                await response.pipe(file);
+                 response.pipe(file);
                 return console.log("done")
             });
         }
