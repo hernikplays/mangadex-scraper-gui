@@ -1,4 +1,5 @@
-# mangadex-scraper-gui
-[![https://img.shields.io/badge/Donate-%241-blue](https://img.shields.io/badge/Donate-%241-blue)](https://paypal.me/hernikplays) ![GitHub](https://img.shields.io/github/license/hernikplays/mangadex-scraper-gui)
+<div style="text-align:center;"><img src="https://i.postimg.cc/W4dDbdn2/icon.png" height=100px></div>
+<h2> mangadex-scraper-gui</h2>
+<a href="https://paypal.me/hernikplays"><img src="https://img.shields.io/badge/Donate-%241-blue"></a> <img src="https://img.shields.io/github/license/hernikplays/mangadex-scraper-gui">
 
- MangaDex scraper POC with GUI written in NodeJS and brought to life with Electron
+MangaDex scraper POC with GUI written in NodeJS and brought to life with Electron
