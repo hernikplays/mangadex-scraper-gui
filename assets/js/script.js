@@ -12,6 +12,7 @@ function scrape(id, filePath) {
         manga,
         chapter
     }) => {
+
         console.log(chapter[0])
         var cover = manga.cover_url.replace("cdndex.com", "mangadex.org") //bad link in api, replace it with right
         document.getElementById("cover").src = cover;
@@ -31,25 +32,23 @@ function scrape(id, filePath) {
             console.log(chaps)
             var path = filePath.replace("/", "\\")
             for (var i = 0; i < chaps.length; i++) { //for every chapter it fetches from API the link to images
-                    Mangadex.getChapter(chaps[i].id).then(chapter => {
-                        //console.log(chapter)
-                        chapter.page_array.forEach(function(link, index, array){ //download each page of chapter
-                            //console.log(item)
-                            if(chapter.volume == "" && chapter.chapter == ""){
-                                dlChap("??","??",link,index+1)
-                            }
-                            else if(chapter.volume == "" && chapter.volume !== ""){
-                                dlChap("??",chapter.chapter,link,index+1)
-                            }
-                            else if(chapter.volume !== "" && chapter.volume == ""){
-                                dlChap(chapter.volume,"??",link,index+1)
-                            }
-                            else{
-                                dlChap(chapter.volume,chapter.chapter,link,index+1)
-                            }
-                        },chapter);
-                    })
-                    break;
+                let group = chapter[i].group_name
+                Mangadex.getChapter(chaps[i].id).then(chapter => {
+                    console.log(manga)
+                    chapter.page_array.forEach(function (link, index, array) { //download each page of chapter
+                        //console.log(item)
+                        if (chapter.volume == "" && chapter.chapter == "") {
+                            dlChap("??", "??", link, index + 1, manga, path, chapter.group)
+                        } else if (chapter.volume == "" && chapter.volume !== "") {
+                            dlChap("??", chapter.chapter, link, index + 1, manga, path, chapter.group)
+                        } else if (chapter.volume !== "" && chapter.volume == "") {
+                            dlChap(chapter.volume, "??", link, index + 1, manga, path, chapter.group)
+                        } else {
+                            dlChap(chapter.volume, chapter.chapter, link, index + 1, manga, path, group)
+                        }
+                    }, chapter, manga, path,group);
+                })
+                break;
             }
 
         }
@@ -61,8 +60,27 @@ function scrape(id, filePath) {
 
 }
 
-function dlChap(vol,chap,link,pos){
+function dlChap(vol, chap, link, pos, manga, path, group) { //download function
     console.log(`Vol. ${vol} - Chap. ${chap} page number ${pos} at ${link}`)
+    let mangatitle = manga.title.replace(/[/\\?%*:|"<>]/g, '')
+    if (!fs.existsSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`)) {
+        fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`, {
+            recursive: true
+        })
+    }
+    if (pos <= 9) {
+        const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\0${pos}.${link.split('.').pop()}`);
+        const request = https.get(link, function (response) {
+            response.pipe(file);
+            console.log("done")
+        });
+    } else {
+        const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\${pos}.${link.split('.').pop()}`);
+        const request = https.get(link, function (response) {
+            response.pipe(file);
+            console.log("done")
+        });
+    }
 }
 
 
