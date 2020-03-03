@@ -1,45 +1,50 @@
-#content{
+#content {
     text-align: center;
-    
+
 }
+
 body {
     background-color: #272932;
     font-family: 'Oswald', sans-serif;
 
-  }
-  
-  h1 {
-    color:  whitesmoke;
+}
+
+h1 {
+    color: whitesmoke;
     text-align: center;
     font-size: 30px;
     font-weight: bold;
-    
-  }
-  h2{
+
+}
+
+h2 {
     color: whitesmoke;
     font-family: 'Ubuntu', sans-serif;
-    
-  }
-  p {
+
+}
+
+p {
     color: #FF773D;
     font-family: 'Ubuntu', sans-serif;
     font-size: 18x;
     font-weight: bolder;
-  }
-  button{
-        background-color: #FF773D;; 
-        border: none;
-        color:white;
-        padding: 5px 15px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin-top: 20px;
-        border-radius: 5px;
-  }
-         
-  input{
+}
+
+button {
+    background-color: #FF773D;
+    ;
+    border: none;
+    color: white;
+    padding: 5px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+input {
     width: 30%;
     padding: 12px 20px;
     margin-top: -10px;
@@ -48,10 +53,4 @@ body {
     border-radius: 4px;
     box-sizing: border-box;
     font-family: 'Ubuntu', sans-serif;
-  }
-  custom-select {
-    position: relative;
-    font-family: Arial;
-  }
-
- 
+}
