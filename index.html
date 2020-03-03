@@ -21,19 +21,22 @@
             <p>Language:</p>
             <input type="text" name="lang" id="lang" placeholder="E.g.: English, French, Polish etc.">
             <div id="numb" style="display:none;">
-            <p id="chapnum">Chapter Number</p>
-            <input type="number" name="number" id="number" placeholder="1" pattern= "^[1–9]$">
-        </div>
+                <p id="chapnum">Chapter Number</p>
+                <input type="number" name="number" id="number" placeholder="1" pattern="^[1–9]$">
+            </div>
             <p>What to download</p>
-            <select id="selop" onchange="change(document.getElementById('selop').options[document.getElementById('selop').selectedIndex].value)">
-                <option value="all">All chapters available</option>
-                <option value="ch">Single Chapter</option>
-            </select><br>
+                <select id="selop"
+                    onchange="change(document.getElementById('selop').options[document.getElementById('selop').selectedIndex].value)">
+                    <option value="all">All chapters available</option>
+                    <option value="ch">Single Chapter</option>
+                </select>
+        
+            <br>
             <button type="submit" id="submit"
                 onclick="scrape(document.getElementById('theid').value,document.getElementById('folder').value)">Scrape</button>
         </div>
-        <div id="info" style="display: none">
-            <img id="cover" src="" width=20%>
+        <div id="info" style="display: none;">
+            <img id="cover" src="" width=20% style="margin-top: 15px;">
             <div id="ge">
                 <p id="label">Name: </p>
                 <p id="name"></p>
