@@ -122,5 +122,5 @@ function dlTO(file,link){
             }
         })
         
-    }, 2000)
+    }, 5000)
 }
