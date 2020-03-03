@@ -107,14 +107,20 @@ function change(value) {
 }
 
 function dlTO(file,link){
-    setTimeout(async function(){
-        console.log("timeout")
-        await new Promise(resolve =>
-            request(link)
-              .pipe(file)
-              .on('error', function(err){console.error(err)})
-              .on('clientError', function(err){console.error(err)})
-              .on('finish', resolve)
-              );
-    }, 10000)
+    setTimeout(function(){
+        var out = request({ uri: link });
+        out.on('response', function (resp) {
+            console.log(resp)
+            if (resp.statusCode === 200){
+                out.pipe(file);
+                file.on('close', function () {
+                    console.log("Done")
+                });
+            }
+            else{
+                console.error("No file found at given url.")
+            }
+        })
+        
+    }, 2000)
 }
