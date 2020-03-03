@@ -30,10 +30,26 @@ function scrape(id, filePath) {
 
             console.log(chaps)
             var path = filePath.replace("/", "\\")
-            for (var i = 0; i < chaps.length; i++) {
+            for (var i = 0; i < chaps.length; i++) { //for every chapter it fetches from API the link to images
                     Mangadex.getChapter(chaps[i].id).then(chapter => {
-                        console.log(chapter)
+                        //console.log(chapter)
+                        chapter.page_array.forEach(function(link, index, array){ //download each page of chapter
+                            //console.log(item)
+                            if(chapter.volume == "" && chapter.chapter == ""){
+                                dlChap("??","??",link,index+1)
+                            }
+                            else if(chapter.volume == "" && chapter.volume !== ""){
+                                dlChap("??",chapter.chapter,link,index+1)
+                            }
+                            else if(chapter.volume !== "" && chapter.volume == ""){
+                                dlChap(chapter.volume,"??",link,index+1)
+                            }
+                            else{
+                                dlChap(chapter.volume,chapter.chapter,link,index+1)
+                            }
+                        },chapter);
                     })
+                    break;
             }
 
         }
@@ -45,7 +61,9 @@ function scrape(id, filePath) {
 
 }
 
-
+function dlChap(vol,chap,link,pos){
+    console.log(`Vol. ${vol} - Chap. ${chap} page number ${pos} at ${link}`)
+}
 
 
 /*
