@@ -32,7 +32,7 @@ function scrape(id, filePath) {
             console.log(chaps)
             var path = filePath.replace("/", "\\")
             for (var i = 0; i < chaps.length; i++) { //for every chapter it fetches from API the link to images
-                let group = chapter[i].group_name
+                let group = chaps[i].group_name
                 Mangadex.getChapter(chaps[i].id).then(chapter => {
                     console.log(manga)
                     chapter.page_array.forEach(function (link, index, array) { //download each page of chapter
@@ -84,21 +84,3 @@ function dlChap(vol, chap, link, pos, manga, path, group) { //download function
 }
 
 
-/*
- if (chaps[i].volume == "" || chaps[i].chapter == "") {
-                    fs.mkdirSync(`${path}\\${manga.title}\\Vol. ? Ch. ${chaps[i].title} - ${chaps[i].group_name}`, {
-                        recursive: true
-                    })
-                } else {
-                    if (!fs.existsSync(`${path}\\${manga.title}\\Vol. ${chaps[i].volume} Ch. ${chaps[i].chapter} - ${chaps[i].group_name}`)) {
-                        fs.mkdirSync(`${path}\\${manga.title}\\Vol. ${chaps[i].volume} Ch. ${chaps[i].chapter} - ${chaps[i].group_name}`, {
-                            recursive: true
-                        })
-                    }
-                    if (i <= 9) {
-                        const file = fs.createWriteStream(`${path}\\${manga.title}\\Vol. ${chaps[i].volume} Ch. ${chaps[i].chapter} - ${chaps[i].group_name}\\0${i +1}.png`);
-                    } else {
-                        const file = fs.createWriteStream(`${path}\\${manga.title}\\Vol. ${chaps[i].volume} Ch. ${chaps[i].chapter} - ${chaps[i].group_name}\\${i +1}.png`);
-                    }
-                }
-                */
