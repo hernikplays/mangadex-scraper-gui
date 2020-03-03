@@ -94,3 +94,12 @@ function dlChap(vol, chap, link, pos, manga, path, group) { //download function
 
 }
 
+function change(value){
+    if(value == "all"){
+        document.getElementById("numb").style.display = "none";
+    }
+    else{
+        document.getElementById("numb").style.display = "contents";
+    }
+}
+
