@@ -92,7 +92,7 @@ function dlChap(vol, chap, link, pos, manga, path, group) { //download function
             request(link).pipe(file)
             return console.log("Downloaded")
         }
-    }, 2000)
+    }, 50000)
 
 
 }
