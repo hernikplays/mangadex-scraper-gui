@@ -14,9 +14,9 @@
         <h1>MangaDex GUI Scraper</h1>
         <h2>Made by hernikplays</h2>
         <div id="values">
-            <p>Manga ID</p>
+            <p>Manga ID:</p>
             <input type="text" name="theid" id="theid" placeholder="E.g.: 22723">
-            <p>File Path</p>
+            <p>File Path:</p>
             <input type="text" name="folder" id="folder" placeholder="C:/Users/You/Documents">
             <p>Language:</p>
             <input type="text" name="lang" id="lang" placeholder="E.g.: English, French, Polish etc.">
@@ -24,11 +24,11 @@
                 <p id="chapnum">Chapter Number</p>
                 <input type="number" name="number" id="number" placeholder="1" pattern="^[1–9]$">
             </div>
-            <p>What to download</p>
+            <p>What to download:</p>
                 <select id="selop"
                     onchange="change(document.getElementById('selop').options[document.getElementById('selop').selectedIndex].value)">
                     <option value="all">All chapters available</option>
-                    <option value="ch">Single Chapter</option>
+                    <option value="ch">Single Chapter (Not Yet Implemented)</option>
                 </select>
         
             <br>
@@ -36,6 +36,7 @@
                 onclick="scrape(document.getElementById('theid').value,document.getElementById('folder').value)">Scrape</button>
         </div>
         <div id="info" style="display: none;">
+            <p id="percentage"></p>
             <img id="cover" src="" width=20% style="margin-top: 15px;">
             <div id="ge">
                 <p id="label">Name: </p>

@@ -12,8 +12,10 @@ function loop(chaps, path, manga) {
     setTimeout(function () {
         let group = chaps[i].group_name
         Mangadex.getChapter(chaps[i].id).then(chapter => {
-            //console.log(manga)
+
+            console.log(chapter.page_array.length)
             chapter.page_array.forEach(function (link, index, array) { //download each page of chapter
+
                 console.log(chaps[i - 1])
                 if (chapter.volume == "" && chapter.chapter == "") {
                     dlChap("Unknown", chapter.title, link, index + 1, manga, path, chapter.group)
@@ -28,7 +30,10 @@ function loop(chaps, path, manga) {
         })
         i++;
         if (i < chaps.length) {
+            document.getElementById("percentage").innerHTML = `Downloaded ${i} chapters out of ${chaps.length}`
             loop(chaps, path, manga);
+        } else {
+            document.getElementById("percentage").innerHTML = `Download Complete`
         }
     }, 3000, chaps, path, manga)
 }
@@ -70,36 +75,34 @@ function scrape(id, filePath) {
 
 function dlChap(vol, chap, link, pos, manga, path, group) { //download function
     console.log(`Vol. ${vol} - Chap. ${chap} page number ${pos} at ${link}`)
-    
-        let mangatitle = manga.title.replace(/[/\\?%*:|"<>]/g, '')
-        if (!fs.existsSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`)) {
-            fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`, {
-                recursive: true
-            })
-        } 
-        if (pos <= 9) {
-            const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\0${pos}.${link.split('.').pop()}`);
-            const request = https.get(link, function (response) {
-                 response.pipe(file);
-                return console.log("done")
-            });
-        } else {
-            const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\${pos}.${link.split('.').pop()}`);
-            const request = https.get(link, function (response) {
-                 response.pipe(file);
-                return console.log("done")
-            });
-        }
-    
+
+    let mangatitle = manga.title.replace(/[/\\?%*:|"<>]/g, '')
+    if (!fs.existsSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`)) {
+        fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`, {
+            recursive: true
+        })
+    }
+    if (pos <= 9) {
+        const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\0${pos}.${link.split('.').pop()}`);
+        const request = https.get(link, function (response) {
+            response.pipe(file);
+            return console.log("done")
+        });
+    } else {
+        const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\${pos}.${link.split('.').pop()}`);
+        const request = https.get(link, function (response) {
+            response.pipe(file);
+            return console.log("done")
+        });
+    }
+
 
 }
 
-function change(value){
-    if(value == "all"){
+function change(value) {
+    if (value == "all") {
         document.getElementById("numb").style.display = "none";
-    }
-    else{
+    } else {
         document.getElementById("numb").style.display = "contents";
     }
 }
-
