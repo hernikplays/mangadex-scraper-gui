@@ -6,4 +6,4 @@ MangaDex scraper POC with GUI written in NodeJS and brought to life with Electro
 
 Don't know how to use the app? Start [here](https://github.com/hernikplays/mangadex-scraper-gui/wiki/Using-the-app).
 
-## Disclaimer: Please do not use this tool to steal copyrighted work!
+### Disclaimer: Please do not use this tool to steal copyrighted work!
