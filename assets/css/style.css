@@ -61,5 +61,9 @@ input {
     font-family: 'Ubuntu', sans-serif;
 }
 #percentage{
+    margin-top: 8px;
     margin-bottom: -5px;
+}
+#label{
+    margin-bottom:-5px;
 }

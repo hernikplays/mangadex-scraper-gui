@@ -13,10 +13,10 @@ function loop(chaps, path, manga) {
         let group = chaps[i].group_name
         Mangadex.getChapter(chaps[i].id).then(chapter => {
 
-            console.log(chapter.page_array.length)
+            
             chapter.page_array.forEach(function (link, index, array) { //download each page of chapter
 
-                console.log(chaps[i - 1])
+                console.log(chapter)
                 if (chapter.volume == "" && chapter.chapter == "") {
                     dlChap("Unknown", chapter.title, link, index + 1, manga, path, chapter.group)
                 } else if (chapter.volume == "" && chapter.volume !== "") {
@@ -44,7 +44,6 @@ function scrape(id, filePath) {
         chapter
     }) => {
 
-        console.log(chapter[0])
         var cover = manga.cover_url.replace("cdndex.com", "mangadex.org") //bad link in api, replace it with right
         document.getElementById("cover").src = cover;
         document.getElementById("name").innerHTML = manga.title
@@ -60,7 +59,7 @@ function scrape(id, filePath) {
                 }
             }
 
-            console.log(chaps)
+            //console.log(chaps)
             var path = filePath.replace("/", "\\")
             loop(chaps, path, manga)
 
@@ -74,7 +73,6 @@ function scrape(id, filePath) {
 }
 
 async function dlChap(vol, chap, link, pos, manga, path, group) { //download function
-    console.log(`Vol. ${vol} - Chap. ${chap} page number ${pos} at ${link}`)
 
 
         let mangatitle = manga.title.replace(/[/\\?%*:|"<>]/g, '')
@@ -98,7 +96,7 @@ async function dlChap(vol, chap, link, pos, manga, path, group) { //download fun
 
 }
 
-function change(value) {
+function change(value) { //function to display the "chapter number" input on frontend
     if (value == "all") {
         document.getElementById("numb").style.display = "none";
     } else {
@@ -108,6 +106,7 @@ function change(value) {
 
 function dlTO(file,link){
     setTimeout(function(){
+        console.log(`Downloading ${link}`)
         var out = request({ uri: link });
         out.on('response', function (resp) {
             console.log(resp)
