@@ -3,7 +3,7 @@ const https = require('https');
 const fs = require('fs')
 const request = require('request');
 
-document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
+//document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
 var i = 0;
 
