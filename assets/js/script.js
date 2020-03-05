@@ -39,6 +39,18 @@ function loop(chaps, path, manga) {
 }
 
 function scrape(id, filePath) {
+    if(!id){
+        alert("Missing ID, please enter a manga ID from MangaDex")
+        return;
+    }
+    if(!filePath){
+        alert("Missing File Path, please enter a path to a folder e.g. C:/Users/YourName/Documents")
+        return
+    }
+    if(!document.getElementById("lang").value){
+        alert("Missing language, please enter a language e.g. English")
+    }
+    
     Mangadex.getManga(id).then(({
         manga,
         chapter
