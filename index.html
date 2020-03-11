@@ -22,13 +22,14 @@
             <input type="text" name="lang" id="lang" placeholder="E.g.: English, French, Polish etc.">
             <div id="numb" style="display:none;">
                 <p id="chapnum">Chapter Number</p>
+                <p id="info">(Note: if there is a chapter without number, it will appear before the chapter marked as first)</p>
                 <input type="number" name="number" id="number" placeholder="1" pattern="^[1–9]$">
             </div>
             <p>What to download:</p>
                 <select id="selop"
                     onchange="change(document.getElementById('selop').options[document.getElementById('selop').selectedIndex].value)">
                     <option value="all">All chapters available</option>
-                    <option value="ch">Single Chapter (Not Yet Implemented)</option>
+                    <option value="ch">Single/Range of Chapters</option>
                 </select>
         
             <br>

@@ -5,6 +5,8 @@ const request = require('request');
 
 //document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
+document.getElementById("number").value = "1";
+
 var i = 0;
 
 function loop(chaps, path, manga) {
@@ -13,7 +15,7 @@ function loop(chaps, path, manga) {
         let group = chaps[i].group_name
         Mangadex.getChapter(chaps[i].id).then(chapter => {
 
-            
+
             chapter.page_array.forEach(function (link, index, array) { //download each page of chapter
 
                 console.log(chapter)
@@ -39,18 +41,18 @@ function loop(chaps, path, manga) {
 }
 
 function scrape(id, filePath) {
-    if(!id){
+    if (!id) {
         alert("Missing ID, please enter a manga ID from MangaDex")
         return;
     }
-    if(!filePath){
+    if (!filePath) {
         alert("Missing File Path, please enter a path to a folder e.g. C:/Users/YourName/Documents")
         return
     }
-    if(!document.getElementById("lang").value){
+    if (!document.getElementById("lang").value) {
         alert("Missing language, please enter a language e.g. English")
     }
-    
+
     Mangadex.getManga(id).then(({
         manga,
         chapter
@@ -75,6 +77,35 @@ function scrape(id, filePath) {
             var path = filePath.replace("/", "\\")
             loop(chaps, path, manga)
 
+        } else if (document.getElementById("selop").options[document.getElementById("selop").selectedIndex].value == "ch") {
+            var path = filePath.replace("/", "\\")
+            let chapternum = document.getElementById('number').value
+            if (chapternum == 0) {
+                chapternum = 1;
+            }
+
+            if (!chapternum) {
+                alert("Missing chapter number, enter a number (e.g. 1) or range of chapter (e.g 1-5)")
+                return
+            }
+            if (chapternum.includes("-")) {
+                alert("Not yet implemented")
+                return;
+            } else {
+                let id = chapter[chapternum - 1].id
+                Mangadex.getChapter(id).then(chapter => {
+                    if (chapter.volume == "" && chapter.chapter == "") {
+                        dlChap("Unknown", chapter.title, link, chapternum, manga, path, chapter.group)
+                    } else if (chapter.volume == "" && chapter.volume !== "") {
+                        dlChap("Unknown", chapter.chapter, link, chapternum, manga, path, chapter.group)
+                    } else if (chapter.volume !== "" && chapter.volume == "") {
+                        dlChap(chapter.volume, chapter.title, link, chapternum, manga, path, chapter.group)
+                    } else {
+                        dlChap(chapter.volume, chapter.chapter, link, chapternum, manga, path, group)
+                    }
+
+                })
+            }
         }
 
 
@@ -87,22 +118,22 @@ function scrape(id, filePath) {
 async function dlChap(vol, chap, link, pos, manga, path, group) { //download function
 
 
-        let mangatitle = manga.title.replace(/[/\\?%*:|"<>]/g, '')
-        if (!fs.existsSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`)) {
-            fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`, {
-                recursive: true
-            })
-        }
-        if (pos <= 9) {
-            const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\0${pos}.${link.split('.').pop()}`);
-            dlTO(file,link)
-            return console.log("Downloaded")
-        } else {
-            const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\${pos}.${link.split('.').pop()}`);
-            dlTO(file,link)
-            
-            return console.log("Downloaded")
-        }
+    let mangatitle = manga.title.replace(/[/\\?%*:|"<>]/g, '')
+    if (!fs.existsSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`)) {
+        fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`, {
+            recursive: true
+        })
+    }
+    if (pos <= 9) {
+        const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\0${pos}.${link.split('.').pop()}`);
+        dlTO(file, link)
+        return console.log("Downloaded")
+    } else {
+        const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\${pos}.${link.split('.').pop()}`);
+        dlTO(file, link)
+
+        return console.log("Downloaded")
+    }
 
 
 
@@ -116,22 +147,23 @@ function change(value) { //function to display the "chapter number" input on fro
     }
 }
 
-function dlTO(file,link){
-    setTimeout(function(){
+function dlTO(file, link) {
+    setTimeout(function () {
         console.log(`Downloading ${link}`)
-        var out = request({ uri: link });
+        var out = request({
+            uri: link
+        });
         out.on('response', function (resp) {
             console.log(resp)
-            if (resp.statusCode === 200){
+            if (resp.statusCode === 200) {
                 out.pipe(file);
                 file.on('close', function () {
                     console.log("Done")
                 });
-            }
-            else{
+            } else {
                 console.error("No file found at given url.")
             }
         })
-        
+
     }, 5000)
 }
