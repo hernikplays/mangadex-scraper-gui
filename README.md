@@ -1,5 +1,8 @@
 <div style="text-align:center;"><img src="https://i.postimg.cc/W4dDbdn2/icon.png" height=100px></div>
 <h2> mangadex-scraper-gui</h2>
+
+### [Download](https://github.com/hernikplays/mangadex-scraper-gui/releases/latest)
+
 <a href="https://paypal.me/hernikplays"><img src="https://img.shields.io/badge/Donate-%241-blue"></a> <img src="https://img.shields.io/github/license/hernikplays/mangadex-scraper-gui">
 
 MangaDex scraper POC with GUI written in NodeJS and brought to life with Electron
