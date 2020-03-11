@@ -92,17 +92,23 @@ function scrape(id, filePath) {
                 alert("Not yet implemented")
                 return;
             } else {
+                
                 let id = chapter[chapternum - 1].id
                 Mangadex.getChapter(id).then(chapter => {
-                    if (chapter.volume == "" && chapter.chapter == "") {
-                        dlChap("Unknown", chapter.title, link, chapternum, manga, path, chapter.group)
-                    } else if (chapter.volume == "" && chapter.volume !== "") {
-                        dlChap("Unknown", chapter.chapter, link, chapternum, manga, path, chapter.group)
-                    } else if (chapter.volume !== "" && chapter.volume == "") {
-                        dlChap(chapter.volume, chapter.title, link, chapternum, manga, path, chapter.group)
-                    } else {
-                        dlChap(chapter.volume, chapter.chapter, link, chapternum, manga, path, group)
-                    }
+                    console.log(chapter)
+                    chapter.page_array.forEach(function (link, index, array) { //download each page of chapter
+
+                        console.log(chapter)
+                        if (chapter.volume == "" && chapter.chapter == "") {
+                            dlChap("Unknown", chapter.title, link, index + 1, manga, path, chapter.group)
+                        } else if (chapter.volume == "" && chapter.volume !== "") {
+                            dlChap("Unknown", chapter.chapter, link, index + 1, manga, path, chapter.group)
+                        } else if (chapter.volume !== "" && chapter.volume == "") {
+                            dlChap(chapter.volume, chapter.title, link, index + 1, manga, path, chapter.group)
+                        } else {
+                            dlChap(chapter.volume, chapter.chapter, link, index + 1, manga, path, group)
+                        }
+                    }, );
 
                 })
             }
