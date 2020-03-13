@@ -89,7 +89,9 @@ function scrape(id, filePath) {
                 return
             }
             if (chapternum.includes("-")) {
-                alert("Not yet implemented")
+                let from = chapternum.substring(chapternum.indexOf('-')+ 1 );
+                let to = chapternum.substring(0, chapternum.indexOf('-'));
+                console.log(to + "/" + from)
                 return;
             } else {
                 
