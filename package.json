@@ -4,12 +4,12 @@
   "description": "MangaDex scraper with GUI",
   "main": "main.js",
   "dependencies": {
-    "mangadex-api": "^2.0.2",
+    "mangadex-api": "^2.0.3",
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "electron": "^8.0.2",
-    "electron-builder": "^22.3.6"
+    "electron": "^8.1.1",
+    "electron-builder": "^22.4.1"
   },
   "scripts": {
     "postinstall": "install-app-deps",
