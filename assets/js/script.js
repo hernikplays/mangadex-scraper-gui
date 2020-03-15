@@ -125,17 +125,18 @@ async function dlChap(vol, chap, link, pos, manga, path, group) { //download fun
 
 
     let mangatitle = manga.title.replace(/[/\\?%*:|"<>]/g, '')
-    if (!fs.existsSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`)) {
-        fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}`, {
+    let groupname = group.replace(/[/\\?%*:|"<>]/g, '')
+    if (!fs.existsSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`)) {
+        fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`, {
             recursive: true
         })
     }
     if (pos <= 9) {
-        const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\0${pos}.${link.split('.').pop()}`);
+        const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\0${pos}.${link.split('.').pop()}`);
         dlTO(file, link)
         return console.log("Downloaded")
     } else {
-        const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${group}\\${pos}.${link.split('.').pop()}`);
+        const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\${pos}.${link.split('.').pop()}`);
         dlTO(file, link)
 
         return console.log("Downloaded")

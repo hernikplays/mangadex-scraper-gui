@@ -104,3 +104,4 @@ dist
 .tern-port
 #build folder
 dist
+.vs/slnx.sqlite
