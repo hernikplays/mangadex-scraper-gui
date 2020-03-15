@@ -61,9 +61,11 @@ function scrape(id, filePath) {
         var cover = manga.cover_url.replace("cdndex.com", "mangadex.org") //bad link in api, replace it with right
         document.getElementById("cover").src = cover;
         document.getElementById("name").innerHTML = manga.title
-        document.getElementById("info").style.display = "contents"; //show info
+        document.getElementById("info").style.display = "initial"; //show info
 
         if (document.getElementById("selop").options[document.getElementById("selop").selectedIndex].value == "all") {
+          
+
             var chaps = []
 
             for (var i = 0; i < chapter.length; i++) { //filters chapters to selected language
@@ -78,6 +80,8 @@ function scrape(id, filePath) {
             loop(chaps, path, manga)
 
         } else if (document.getElementById("selop").options[document.getElementById("selop").selectedIndex].value == "ch") {
+
+
             var path = filePath.replace("/", "\\")
             let chapternum = document.getElementById('number').value
             if (chapternum == 0) {
@@ -89,10 +93,22 @@ function scrape(id, filePath) {
                 return
             }
             if (chapternum.includes("-")) {
-                alert("Not yet implemented")
+                let to = chapternum.substring(chapternum.indexOf('-') + 1);
+                let from = chapternum.substring(0, chapternum.indexOf('-'));
+                console.log(from + "/" + to)
+                var chaps = []
+
+                for (var i = from - 1; i < to; i++) {
+                    console.log(i)
+                    chaps.push(chapter[i])
+                    console.log("Push success")
+
+                }
+                console.log(chaps)
+                loop(chaps, path, manga)
                 return;
             } else {
-                
+
                 let id = chapter[chapternum - 1].id
                 Mangadex.getChapter(id).then(chapter => {
                     console.log(chapter)

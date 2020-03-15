@@ -22,16 +22,17 @@
             <input type="text" name="lang" id="lang" placeholder="E.g.: English, French, Polish etc.">
             <div id="numb" style="display:none;">
                 <p id="chapnum">Chapter Number</p>
-                <p id="info">(Note: if there is a chapter without number, it will appear before the chapter marked as first)</p>
-                <input type="number" name="number" id="number" placeholder="1" pattern="^[1–9]$">
+                <p id="info">(Note: if there is a chapter without number, it will appear before the chapter marked as
+                    first)</p>
+                <input type="text" name="number" id="number" placeholder="1" pattern="^[1–9-]$">
             </div>
             <p>What to download:</p>
-                <select id="selop"
-                    onchange="change(document.getElementById('selop').options[document.getElementById('selop').selectedIndex].value)">
-                    <option value="all">All chapters available</option>
-                    <option value="ch">Single/Range of Chapters</option>
-                </select>
-        
+            <select id="selop"
+                onchange="change(document.getElementById('selop').options[document.getElementById('selop').selectedIndex].value)">
+                <option value="all">All chapters available</option>
+                <option value="ch">Single/Range of Chapters</option>
+            </select>
+
             <br>
             <button type="submit" id="submit"
                 onclick="scrape(document.getElementById('theid').value,document.getElementById('folder').value)">Scrape</button>
@@ -43,7 +44,6 @@
                 <p id="label">Name: </p>
                 <p id="name"></p>
             </div>
-
         </div>
         <p id="footer">Suggest features or report bugs at <u>github.com/hernikplays/mangadex-scraper-gui</u></p>
         <script src="assets/js/script.js"></script>
