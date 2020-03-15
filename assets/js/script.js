@@ -61,7 +61,7 @@ function scrape(id, filePath) {
         var cover = manga.cover_url.replace("cdndex.com", "mangadex.org") //bad link in api, replace it with right
         document.getElementById("cover").src = cover;
         document.getElementById("name").innerHTML = manga.title
-        document.getElementById("info").style.display = "initial"; //show info
+       // document.getElementById("info").style.display = "initial"; //show info
 
         if (document.getElementById("selop").options[document.getElementById("selop").selectedIndex].value == "all") {
           
