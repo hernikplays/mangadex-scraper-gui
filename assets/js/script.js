@@ -13,9 +13,9 @@ document.getElementById("number").value = "1";
 console.log(process.platform)
 
 if (process.platform == "linux") {
-    document.getElementById("folder").placeholder == "/home/youruserhere/Documents";
+    document.getElementById("folder").placeholder = "/home/youruserhere/Documents";
 } else if (process.platform == "win32") {
-    document.getElementById("folder").placeholder == "C:/Users/You/Documents";
+    document.getElementById("folder").placeholder = "C:/Users/You/Documents";
 }
 var i = 0;
 
