@@ -116,22 +116,37 @@ function scrape(id, filePath) {
                 console.log(from + "/" + to)
                 var chaps = []
 
+                for (var i = 0; i < chapter.length; i++) { //filters chapters to selected language
+                    if (chapter[i].lang_name.toLowerCase() == document.getElementById("lang").value.toLowerCase()) {
+                        chaps.push(chapter[i])
+                        console.log("Push success")
+                    }
+                }
+
+                let filchap = [];
                 for (var i = from - 1; i < to; i++) {
                     console.log(i)
-                    chaps.push(chapter[i])
+                    filchap.push(chaps[i])
                     console.log("Push success")
 
                 }
-                console.log(chaps)
-                loop(chaps, path, manga)
+                
+                console.log(filchap)
+                loop(filchap, path, manga)
                 return;
             } else {
 
-                let id = chapter[chapternum - 1].id
+                for (var i = 0; i < chapter.length; i++) { //filters chapters to selected language
+                    if (chapter[i].lang_name.toLowerCase() == document.getElementById("lang").value.toLowerCase()) {
+                        chaps.push(chapter[i])
+                        console.log("Push success")
+                    }
+                }
+
+                let id = chaps[chapternum - 1].id
                 Mangadex.getChapter(id).then(chapter => {
                     console.log(chapter)
-                    chapter.page_array.forEach(function (link, index, array) { //download each page of chapter
-
+                    chapter.page_array.forEach(function (link, index, array) { 
                         console.log(chapter)
                         if (chapter.volume == "" && chapter.chapter == "") {
                             dlChap("Unknown", chapter.title, link, index + 1, manga, path, chapter.group)
