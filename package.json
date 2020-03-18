@@ -43,7 +43,8 @@
       "target": [
         "AppImage",
         "deb"
-      ]
+      ],
+      "category": "Utility"
     },
     "dmg": {
       "contents": [
@@ -57,7 +58,8 @@
           "type": "link",
           "path": "/Applications"
         }
-      ]
+      ],
+      "category": "public.app-category.utilities"
     }
   }
 }
