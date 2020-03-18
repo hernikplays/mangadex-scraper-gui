@@ -10,6 +10,7 @@ const version = "2.0"
 //document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
 document.getElementById("number").value = "1";
+console.log(process.platform)
 
 if (process.platform == "linux") {
     document.getElementById("folder").placeholder == "/home/youruserhere/Documents";
