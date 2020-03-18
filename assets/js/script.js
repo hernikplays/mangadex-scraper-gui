@@ -200,11 +200,11 @@ async function dlChap(vol, chap, link, pos, manga, path, group) { //download fun
             })
         }
         if (pos <= 9) {
-            const file = fs.createWriteStream(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}\\0${pos}.${link.split('.').pop()}`);
+            const file = fs.createWriteStream(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}/0${pos}.${link.split('.').pop()}`);
             dlTO(file, link)
             return console.log("Downloaded")
         } else {
-            const file = fs.createWriteStream(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}\\${pos}.${link.split('.').pop()}`);
+            const file = fs.createWriteStream(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}/${pos}.${link.split('.').pop()}`);
             dlTO(file, link)
 
             return console.log("Downloaded")
