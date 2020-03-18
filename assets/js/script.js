@@ -5,7 +5,7 @@ const request = require('request');
 const swal = require("sweetalert")
 const electron = require("electron")
 
-const version = "1.2"
+const version = "2.0"
 
 //document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
@@ -84,9 +84,13 @@ function scrape(id, filePath) {
             loop(chaps, path, manga)
 
         } else if (document.getElementById("selop").options[document.getElementById("selop").selectedIndex].value == "ch") {
-
-
-            var path = filePath.replace("/", "\\")
+            var path
+            if(process.platform == "win32"){
+            path = filePath.replace("/", "\\")
+        }
+        else{
+            path = filePath;
+        }
             let chapternum = document.getElementById('number').value
             if (chapternum == 0) {
                 chapternum = 1;
@@ -146,21 +150,44 @@ async function dlChap(vol, chap, link, pos, manga, path, group) { //download fun
 
     let mangatitle = manga.title.replace(/[/\\?%*:|"<>]/g, '')
     let groupname = group.replace(/[/\\?%*:|"<>]/g, '')
-    if (!fs.existsSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`)) {
-        fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`, {
-            recursive: true
-        })
+    if (process.platform == "win32") {
+        if (!fs.existsSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`)) {
+            fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`, {
+                recursive: true
+            })
+        }
+        if (pos <= 9) {
+            const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\0${pos}.${link.split('.').pop()}`);
+            dlTO(file, link)
+            return console.log("Downloaded")
+        } else {
+            const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\${pos}.${link.split('.').pop()}`);
+            dlTO(file, link)
+    
+            return console.log("Downloaded")
+        }
     }
-    if (pos <= 9) {
-        const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\0${pos}.${link.split('.').pop()}`);
-        dlTO(file, link)
-        return console.log("Downloaded")
-    } else {
-        const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\${pos}.${link.split('.').pop()}`);
-        dlTO(file, link)
-
-        return console.log("Downloaded")
+    else if(process.platform == "linux"){
+        if (!fs.existsSync(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`)) {
+            fs.mkdirSync(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`, {
+                recursive: true
+            })
+        }
+        if (pos <= 9) {
+            const file = fs.createWriteStream(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}\\0${pos}.${link.split('.').pop()}`);
+            dlTO(file, link)
+            return console.log("Downloaded")
+        } else {
+            const file = fs.createWriteStream(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}\\${pos}.${link.split('.').pop()}`);
+            dlTO(file, link)
+    
+            return console.log("Downloaded")
+        }
     }
+    else if(process.platform == "darwin"){
+        swal("Coming soon")
+    }
+    
 
 
 
@@ -209,12 +236,11 @@ function checkVersion() { //check if new version was released on GitHub
                     })
                     .then((value) => {
                         console.log(value)
-                        if(!value){
-                        electron.shell.openExternal(response.body.html_url);
-                    }
+                        if (!value) {
+                            electron.shell.openExternal(response.body.html_url);
+                        }
                     });
 
-            }
-            else console.log("Latest version")
+            } else console.log("Latest version")
         })
 }
