@@ -11,8 +11,11 @@ const version = "2.0"
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
 document.getElementById("number").value = "1";
 
-if(process.platform == "linux"){ document.getElementById("folder").placeholder == "/home/youruserhere/Documents";}
-else if(process.platform == "win32") {document.getElementById("folder").placeholder == "C:/Users/You/Documents";}
+if (process.platform == "linux") {
+    document.getElementById("folder").placeholder == "/home/youruserhere/Documents";
+} else if (process.platform == "win32") {
+    document.getElementById("folder").placeholder == "C:/Users/You/Documents";
+}
 var i = 0;
 
 function loop(chaps, path, manga) {
@@ -87,12 +90,11 @@ function scrape(id, filePath) {
 
         } else if (document.getElementById("selop").options[document.getElementById("selop").selectedIndex].value == "ch") {
             var path
-            if(process.platform == "win32"){
-            path = filePath.replace("/", "\\")
-        }
-        else{
-            path = filePath;
-        }
+            if (process.platform == "win32") {
+                path = filePath.replace("/", "\\")
+            } else {
+                path = filePath;
+            }
             let chapternum = document.getElementById('number').value
             if (chapternum == 0) {
                 chapternum = 1;
@@ -157,6 +159,7 @@ async function dlChap(vol, chap, link, pos, manga, path, group) { //download fun
             fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`, {
                 recursive: true
             })
+            console.log("Windows")
         }
         if (pos <= 9) {
             const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\0${pos}.${link.split('.').pop()}`);
@@ -165,11 +168,11 @@ async function dlChap(vol, chap, link, pos, manga, path, group) { //download fun
         } else {
             const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\${pos}.${link.split('.').pop()}`);
             dlTO(file, link)
-    
+
             return console.log("Downloaded")
         }
-    }
-    else if(process.platform == "linux"){
+    } else if (process.platform == "linux") {
+        console.log(path)
         if (!fs.existsSync(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`)) {
             fs.mkdirSync(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`, {
                 recursive: true
@@ -182,14 +185,13 @@ async function dlChap(vol, chap, link, pos, manga, path, group) { //download fun
         } else {
             const file = fs.createWriteStream(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}\\${pos}.${link.split('.').pop()}`);
             dlTO(file, link)
-    
+
             return console.log("Downloaded")
         }
-    }
-    else if(process.platform == "darwin"){
+    } else if (process.platform == "darwin") {
         swal("Coming soon")
     }
-    
+
 
 
 
