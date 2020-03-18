@@ -1,11 +1,14 @@
 {
   "name": "mangadex-scraper-gui",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "MangaDex scraper with GUI",
   "main": "main.js",
   "dependencies": {
     "mangadex-api": "^2.0.3",
-    "request": "^2.88.2"
+    "minimist": "^1.2.5",
+    "request": "^2.88.2",
+    "sweetalert": "^2.1.2",
+    "unirest": "^0.6.0"
   },
   "devDependencies": {
     "electron": "^8.1.1",
@@ -15,7 +18,7 @@
     "postinstall": "install-app-deps",
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
   },
   "repository": {
     "type": "git",
@@ -31,7 +34,7 @@
   },
   "homepage": "https://github.com/hernikplays/mangadex-scraper-gui#readme",
   "build": {
-    "appId": "cz.hernikplays.mangadexscraper",
+    "appId": "hernikplays.mangadexscraper",
     "win": {
       "target": "portable",
       "icon": "build/icon.ico"

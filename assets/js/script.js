@@ -1,7 +1,11 @@
 const Mangadex = require("mangadex-api")
-const https = require('https');
+const unirest = require('unirest');
 const fs = require('fs')
 const request = require('request');
+const swal = require("sweetalert")
+const electron = require("electron")
+
+const version = "1.2"
 
 //document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
@@ -42,15 +46,15 @@ function loop(chaps, path, manga) {
 
 function scrape(id, filePath) {
     if (!id) {
-        alert("Missing ID, please enter a manga ID from MangaDex")
+        swal("Missing ID", "Please enter a manga ID from MangaDex", "error")
         return;
     }
     if (!filePath) {
-        alert("Missing File Path, please enter a path to a folder e.g. C:/Users/YourName/Documents")
+        swal("Missing File Path", "Please enter a path to a folder e.g. C:/Users/YourName/Documents", "error")
         return
     }
     if (!document.getElementById("lang").value) {
-        alert("Missing language, please enter a language e.g. English")
+        swal("Missing language", "Please enter a language e.g. English", "error")
     }
 
     Mangadex.getManga(id).then(({
@@ -61,10 +65,10 @@ function scrape(id, filePath) {
         var cover = manga.cover_url.replace("cdndex.com", "mangadex.org") //bad link in api, replace it with right
         document.getElementById("cover").src = cover;
         document.getElementById("name").innerHTML = manga.title
-       // document.getElementById("info").style.display = "initial"; //show info
+        // document.getElementById("info").style.display = "initial"; //show info
 
         if (document.getElementById("selop").options[document.getElementById("selop").selectedIndex].value == "all") {
-          
+
 
             var chaps = []
 
@@ -89,7 +93,7 @@ function scrape(id, filePath) {
             }
 
             if (!chapternum) {
-                alert("Missing chapter number, enter a number (e.g. 1) or range of chapter (e.g 1-5)")
+                swal("Missing chapter number", "Enter a number (e.g. 1) or range of chapter (e.g 1-5)", "error")
                 return
             }
             if (chapternum.includes("-")) {
@@ -188,5 +192,29 @@ function dlTO(file, link) {
             }
         })
 
-    }, 5000)
+    }, 3000)
+}
+
+function checkVersion() { //check if new version was released on GitHub
+    unirest.get("https://api.github.com/repos/hernikplays/mangadex-scraper-gui/releases/latest")
+        .header("User-Agent", "hernikplays")
+        .end(function (response) {
+            console.log(response.body.tag_name)
+            if (response.body.tag_name > version) {
+                swal({
+                        title: "There is a new version available",
+                        text: "Click on Download to open the browser and download the new version!",
+                        icon: "warning",
+                        buttons: ["Download", "Cancel"],
+                    })
+                    .then((value) => {
+                        console.log(value)
+                        if(!value){
+                        electron.shell.openExternal(response.body.html_url);
+                    }
+                    });
+
+            }
+            else console.log("Latest version")
+        })
 }
