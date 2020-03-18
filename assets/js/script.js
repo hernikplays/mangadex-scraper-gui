@@ -11,8 +11,8 @@ const version = "2.0"
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
 document.getElementById("number").value = "1";
 
-if(process.platform == "linux") document.getElementById("folder").placeholder == "/home/youruserhere/Documents";
-
+if(process.platform == "linux"){ document.getElementById("folder").placeholder == "/home/youruserhere/Documents";}
+else if(process.platform == "win32") {document.getElementById("folder").placeholder == "C:/Users/You/Documents";}
 var i = 0;
 
 function loop(chaps, path, manga) {
