@@ -22,6 +22,7 @@ var i = 0;
 function loop(chaps, path, manga) {
 
     setTimeout(function () {
+        console.log(chaps)
         let group = chaps[i].group_name
         Mangadex.getChapter(chaps[i].id).then(chapter => {
 
