@@ -86,7 +86,12 @@ function scrape(id, filePath) {
             }
 
             //console.log(chaps)
-            var path = filePath.replace("/", "\\")
+            var path
+            if (process.platform == "win32") {
+                path = filePath.replace("/", "\\")
+            } else {
+                path = filePath;
+            }
             loop(chaps, path, manga)
 
         } else if (document.getElementById("selop").options[document.getElementById("selop").selectedIndex].value == "ch") {
