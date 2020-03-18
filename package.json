@@ -35,6 +35,7 @@
   "homepage": "https://github.com/hernikplays/mangadex-scraper-gui#readme",
   "build": {
     "appId": "hernikplays.mangadexscraper",
+    "category": "public.app-category.utilities",
     "win": {
       "target": "portable",
       "icon": "build/icon.ico"
@@ -58,8 +59,7 @@
           "type": "link",
           "path": "/Applications"
         }
-      ],
-      "category": "public.app-category.utilities"
+      ]
     }
   }
 }
