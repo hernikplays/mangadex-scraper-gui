@@ -4,11 +4,13 @@ const fs = require('fs')
 const request = require('request');
 const swal = require("sweetalert")
 const electron = require("electron")
+const {
+    zip
+} = require('zip-a-folder');
 
-const version = "2.0"
+const version = "2.1"
 
-//document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
-document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
+document.getElementById("lang").value = "English"; //set lang because Im lazy
 document.getElementById("number").value = "1";
 console.log(process.platform)
 
@@ -47,6 +49,9 @@ function loop(chaps, path, manga) {
             loop(chaps, path, manga);
         } else {
             document.getElementById("percentage").innerHTML = `Download Complete`
+            if (document.getElementById("zipbox").checked == true) {
+                zipit(path)
+            }
         }
     }, 3000, chaps, path, manga)
 }
@@ -131,7 +136,7 @@ function scrape(id, filePath) {
                     console.log("Push success")
 
                 }
-                
+
                 console.log(filchap)
                 loop(filchap, path, manga)
                 return;
@@ -147,7 +152,7 @@ function scrape(id, filePath) {
                 let id = chaps[chapternum - 1].id
                 Mangadex.getChapter(id).then(chapter => {
                     console.log(chapter)
-                    chapter.page_array.forEach(function (link, index, array) { 
+                    chapter.page_array.forEach(function (link, index, array) {
                         console.log(chapter)
                         if (chapter.volume == "" && chapter.chapter == "") {
                             dlChap("Unknown", chapter.title, link, index + 1, manga, path, chapter.group)
@@ -269,4 +274,10 @@ function checkVersion() { //check if new version was released on GitHub
 
             } else console.log("Latest version")
         })
+}
+
+function zipit(path) {
+    fs.readdir(path, function(err,items){
+        console.log(items)
+    })
 }
