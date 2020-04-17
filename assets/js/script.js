@@ -288,7 +288,7 @@ function checkVersion() { //check if new version was released on GitHub
 }
 
 function zipit(path) {
-    fs.readdir(path, function (err, items) {
-        console.log(items)
-    })
+    fs.readdirSync(path).forEach(file => {
+        console.log(file)
+    });
 }
