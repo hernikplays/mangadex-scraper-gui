@@ -188,11 +188,11 @@ async function dlChap(vol, chap, link, pos, manga, path, group, chapters) { //do
         }
         if (pos <= 9) {
             const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\0${pos}.${link.split('.').pop()}`);
-            dlTO(file, link, manga, path, chapters)
+            dlTO(file, link, manga, `${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`, chapters)
             return console.log("Downloaded")
         } else {
             const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\${pos}.${link.split('.').pop()}`);
-            dlTO(file, link, manga, path, chapters)
+            dlTO(file, link, manga, `${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`, chapters)
 
             return console.log("Downloaded")
         }
@@ -205,11 +205,11 @@ async function dlChap(vol, chap, link, pos, manga, path, group, chapters) { //do
         }
         if (pos <= 9) {
             const file = fs.createWriteStream(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}/0${pos}.${link.split('.').pop()}`);
-            dlTO(file, link, manga, path, chapters)
+            dlTO(file, link, manga, `${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`, chapters)
             return console.log("Downloaded")
         } else {
             const file = fs.createWriteStream(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}/${pos}.${link.split('.').pop()}`);
-            dlTO(file, link, manga, path, chapters)
+            dlTO(file, link, manga, `${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`, chapters)
 
             return console.log("Downloaded")
         }
@@ -249,8 +249,6 @@ function dlTO(file, link, manga, path, chaps) {
                         loop(chaps, path, manga);
                     } else {
                         if (document.getElementById("zipbox").checked == "on") {
-                            zipit(path)
-
                             console.log("Zipping single chapter")
                             zipit(path)
                         }
@@ -288,7 +286,14 @@ function checkVersion() { //check if new version was released on GitHub
 }
 
 function zipit(path) {
-    fs.readdirSync(path).forEach(file => {
-        console.log(file)
-    });
+
+    class ZipAFolder {
+
+        static async main() {
+            await zip(`${path}`, `..\\Ch. ${path.replace(".\\","")}.cbz`);
+        }
+    }
+
+    ZipAFolder.main();
+
 }
