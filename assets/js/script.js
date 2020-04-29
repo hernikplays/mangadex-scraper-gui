@@ -290,7 +290,7 @@ function zipit(path) {
     class ZipAFolder {
 
         static async main() {
-            await zip(`${path}`, `..\\Ch. ${path.replace(".\\","")}.cbz`);
+            await zip(`${path}`, `${path}\\..`);
         }
     }
 
