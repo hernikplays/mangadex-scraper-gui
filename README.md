@@ -3,7 +3,7 @@
 
 ### [Download](https://github.com/hernikplays/mangadex-scraper-gui/releases/latest)
 
-<a href="https://paypal.me/hernikplays"><img src="https://img.shields.io/badge/Donate-%241-blue"></a> <img src="https://img.shields.io/github/license/hernikplays/mangadex-scraper-gui"> <a href="https://github.com/hernikplays/mangadex-scraper-gui/releases/latest"><img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/hernikplays/mangadex-scraper-gui/total"></a>
+<a href="https://liberapay.com/hernikplays"><img src="http://img.shields.io/liberapay/patrons/hernikplays.svg?logo=liberapay"></a> <img src="https://img.shields.io/github/license/hernikplays/mangadex-scraper-gui"> <a href="https://github.com/hernikplays/mangadex-scraper-gui/releases/latest"><img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/hernikplays/mangadex-scraper-gui/total"></a>
 
 MangaDex scraper POC with GUI written in NodeJS and brought to life with Electron
 
