@@ -240,16 +240,17 @@ function dlTO(file, link, manga, path, chaps) {
                 out.pipe(file);
                 file.on('close', function () {
                     console.log("Done")
-                    if (chaps) {
-                        console.log("Looping")
-                        i++;
-                        document.getElementById("percentage").innerHTML = `Downloaded ${i} chapters out of ${chaps.length}`
-                        loop(chaps, path, manga);
-                    } else {
+                    if (!chaps) {
                         if (document.getElementById("zipbox").checked == "on") {
                             console.log("Zipping single chapter")
                             zipit(path)
                         }
+                        
+                    } else {
+                        console.log("Looping")
+                        i++;
+                        document.getElementById("percentage").innerHTML = `Downloaded ${i} chapters out of ${chaps.length}`
+                        loop(chaps, path, manga);
                     }
                 });
             } else {
