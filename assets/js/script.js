@@ -3,88 +3,61 @@ const unirest = require('unirest');
 const fs = require('fs')
 const request = require('request');
 const swal = require("sweetalert")
-<<<<<<< HEAD
-const {electron,dialog} = require("electron").remote
-const {
-    zip
-} = require('zip-a-folder');
-
-
-const version = "2.1"
-=======
 const electron = require("electron")
 
 const version = "2.0"
->>>>>>> parent of 19c2a70... implementing automatic packaging into .cbz
 
 //document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
 document.getElementById("number").value = "1";
 console.log(process.platform)
 
-/*if (process.platform == "linux") {
+if (process.platform == "linux") {
     document.getElementById("folder").placeholder = "/home/youruserhere/Documents";
 } else if (process.platform == "win32") {
     document.getElementById("folder").placeholder = "C:/Users/You/Documents";
-}*/
-let i = 0;
-let filePath;
+}
+var i = 0;
 
 function loop(chaps, path, manga) {
 
     setTimeout(function () {
-        //console.log(chaps);
-        if(chaps[i] == undefined) return swal("Error", "There was an error fetching the chapter list", "error")
-        var group = chaps[i].group_name;
+        console.log(chaps)
+        let group = chaps[i].group_name
         Mangadex.getChapter(chaps[i].id).then(chapter => {
-            
-            console.log("Got chapter");
-            console.log(chapter)
-            if(chapter.page_array.length == "0") return swal("Error when getting chapters", "Please make sure there are pages in the chapters of the manga or report an issue on GitHub", "error");
+
+
             chapter.page_array.forEach(function (link, index, array) { //download each page of chapter
 
-                
+                console.log(chapter)
                 if (chapter.volume == "" && chapter.chapter == "") {
-                    dlChap("Unknown", chapter.title, link, index + 1, manga, path, chapter.group, chaps)
+                    dlChap("Unknown", chapter.title, link, index + 1, manga, path, chapter.group)
                 } else if (chapter.volume == "" && chapter.volume !== "") {
-                    dlChap("Unknown", chapter.chapter, link, index + 1, manga, path, chapter.group, chaps)
+                    dlChap("Unknown", chapter.chapter, link, index + 1, manga, path, chapter.group)
                 } else if (chapter.volume !== "" && chapter.volume == "") {
-                    dlChap(chapter.volume, chapter.title, link, index + 1, manga, path, chapter.group, chaps)
+                    dlChap(chapter.volume, chapter.title, link, index + 1, manga, path, chapter.group)
                 } else {
-                    dlChap(chapter.volume, chapter.chapter, link, index + 1, manga, path, group, chaps)
+                    dlChap(chapter.volume, chapter.chapter, link, index + 1, manga, path, group)
                 }
             }, );
         })
-<<<<<<< HEAD
-
-        if (i = chaps.length) {
-            if (document.getElementById("zipbox").checked == "on") {
-                zipit(path)
-            } else {
-                document.getElementById("percentage").innerHTML = `Download Complete`
-            }
-=======
         i++;
         if (i < chaps.length) {
             document.getElementById("percentage").innerHTML = `Downloaded ${i} chapters out of ${chaps.length}`
             loop(chaps, path, manga);
         } else {
             document.getElementById("percentage").innerHTML = `Download Complete`
->>>>>>> parent of 19c2a70... implementing automatic packaging into .cbz
         }
     }, 3000, chaps, path, manga)
 }
 
-function scrape(id) {
-    
-    console.log(filePath)
-    
+function scrape(id, filePath) {
     if (!id) {
         swal("Missing ID", "Please enter a manga ID from MangaDex", "error")
         return;
     }
     if (!filePath) {
-        swal("Missing File Path", "Please choose a folder where to save the manga", "error")
+        swal("Missing File Path", "Please enter a path to a folder e.g. C:/Users/YourName/Documents", "error")
         return
     }
     if (!document.getElementById("lang").value) {
@@ -106,7 +79,7 @@ function scrape(id) {
 
             var chaps = []
 
-            for (var fori = 0; fori < chapter.length; fori++) { //filters chapters to selected language
+            for (var i = 0; i < chapter.length; i++) { //filters chapters to selected language
                 if (chapter[i].lang_name.toLowerCase() == document.getElementById("lang").value.toLowerCase()) {
                     chaps.push(chapter[i])
                     console.log("Push success")
@@ -114,11 +87,21 @@ function scrape(id) {
             }
 
             //console.log(chaps)
-            
-            loop(chaps, filePath, manga)
+            var path
+            if (process.platform == "win32") {
+                path = filePath.replace("/", "\\")
+            } else {
+                path = filePath;
+            }
+            loop(chaps, path, manga)
 
         } else if (document.getElementById("selop").options[document.getElementById("selop").selectedIndex].value == "ch") {
-            
+            var path
+            if (process.platform == "win32") {
+                path = filePath.replace("/", "\\")
+            } else {
+                path = filePath;
+            }
             let chapternum = document.getElementById('number').value
             if (chapternum == 0) {
                 chapternum = 1;
@@ -134,7 +117,7 @@ function scrape(id) {
                 console.log(from + "/" + to)
                 var chaps = []
 
-                for (var fori = 0; fori < chapter.length; fori++) { //filters chapters to selected language
+                for (var i = 0; i < chapter.length; i++) { //filters chapters to selected language
                     if (chapter[i].lang_name.toLowerCase() == document.getElementById("lang").value.toLowerCase()) {
                         chaps.push(chapter[i])
                         console.log("Push success")
@@ -142,7 +125,7 @@ function scrape(id) {
                 }
 
                 let filchap = [];
-                for (var fori = from - 1; fori < to; fori++) {
+                for (var i = from - 1; i < to; i++) {
                     console.log(i)
                     filchap.push(chaps[i])
                     console.log("Push success")
@@ -150,11 +133,11 @@ function scrape(id) {
                 }
                 
                 console.log(filchap)
-                loop(filchap, filePath, manga)
+                loop(filchap, path, manga)
                 return;
             } else {
-                var chaps = []
-                for (var fori = 0; fori < chapter.length; fori++) { //filters chapters to selected language
+
+                for (var i = 0; i < chapter.length; i++) { //filters chapters to selected language
                     if (chapter[i].lang_name.toLowerCase() == document.getElementById("lang").value.toLowerCase()) {
                         chaps.push(chapter[i])
                         console.log("Push success")
@@ -167,13 +150,13 @@ function scrape(id) {
                     chapter.page_array.forEach(function (link, index, array) { 
                         console.log(chapter)
                         if (chapter.volume == "" && chapter.chapter == "") {
-                            dlChap("Unknown", chapter.title, link, index + 1, manga, filePath, chapter.group)
+                            dlChap("Unknown", chapter.title, link, index + 1, manga, path, chapter.group)
                         } else if (chapter.volume == "" && chapter.volume !== "") {
-                            dlChap("Unknown", chapter.chapter, link, index + 1, manga, filePath, chapter.group)
+                            dlChap("Unknown", chapter.chapter, link, index + 1, manga, path, chapter.group)
                         } else if (chapter.volume !== "" && chapter.volume == "") {
-                            dlChap(chapter.volume, chapter.title, link, index + 1, manga, filePath, chapter.group)
+                            dlChap(chapter.volume, chapter.title, link, index + 1, manga, path, chapter.group)
                         } else {
-                            dlChap(chapter.volume, chapter.chapter, link, index + 1, manga, filePath, group)
+                            dlChap(chapter.volume, chapter.chapter, link, index + 1, manga, path, group)
                         }
                     }, );
 
@@ -188,7 +171,7 @@ function scrape(id) {
 
 }
 
-async function dlChap(vol, chap, link, pos, manga, path, group, chapters) { //download function
+async function dlChap(vol, chap, link, pos, manga, path, group) { //download function
 
 
     let mangatitle = manga.title.replace(/[/\\?%*:|"<>]/g, '')
@@ -202,11 +185,11 @@ async function dlChap(vol, chap, link, pos, manga, path, group, chapters) { //do
         }
         if (pos <= 9) {
             const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\0${pos}.${link.split('.').pop()}`);
-            dlTO(file, link, manga, `${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`, chapters)
+            dlTO(file, link)
             return console.log("Downloaded")
         } else {
             const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\${pos}.${link.split('.').pop()}`);
-            dlTO(file, link, manga, `${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`, chapters)
+            dlTO(file, link)
 
             return console.log("Downloaded")
         }
@@ -219,11 +202,11 @@ async function dlChap(vol, chap, link, pos, manga, path, group, chapters) { //do
         }
         if (pos <= 9) {
             const file = fs.createWriteStream(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}/0${pos}.${link.split('.').pop()}`);
-            dlTO(file, link, manga, `${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`, chapters)
+            dlTO(file, link)
             return console.log("Downloaded")
         } else {
             const file = fs.createWriteStream(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}/${pos}.${link.split('.').pop()}`);
-            dlTO(file, link, manga, `${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`, chapters)
+            dlTO(file, link)
 
             return console.log("Downloaded")
         }
@@ -244,7 +227,7 @@ function change(value) { //function to display the "chapter number" input on fro
     }
 }
 
-function dlTO(file, link, manga, path, chaps) {
+function dlTO(file, link) {
     setTimeout(function () {
         console.log(`Downloading ${link}`)
         var out = request({
@@ -256,18 +239,6 @@ function dlTO(file, link, manga, path, chaps) {
                 out.pipe(file);
                 file.on('close', function () {
                     console.log("Done")
-                    if (!chaps) {
-                        if (document.getElementById("zipbox").checked == "on") {
-                            console.log("Zipping single chapter")
-                            zipit(path)
-                        }
-                        
-                    } else {
-                        console.log("Looping")
-                        i++;
-                        document.getElementById("percentage").innerHTML = `Downloaded ${i} chapters out of ${chaps.length}`
-                        loop(chaps, path, manga);
-                    }
                 });
             } else {
                 console.error("No file found at given url.")
@@ -298,32 +269,4 @@ function checkVersion() { //check if new version was released on GitHub
 
             } else console.log("Latest version")
         })
-<<<<<<< HEAD
-}
-
-function zipit(path) {
-
-    class ZipAFolder {
-
-        static async main() {
-            await zip(`${path}`, `${path}\\..`);
-        }
-    }
-
-    ZipAFolder.main();
-
-}
-
-function openButton(){
-    dialog.showOpenDialog({ properties: ['openDirectory'] }).then(result => {
-        if(result.canceled == true){
-            console.log(result.canceled)
-        }
-        else{
-        filePath = result.filePaths[0];
-        console.log(result.filePaths)
-    }
-      })
-=======
->>>>>>> parent of 19c2a70... implementing automatic packaging into .cbz
 }
