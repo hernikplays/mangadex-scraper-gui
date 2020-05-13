@@ -17,7 +17,7 @@
             <p>Manga ID:</p>
             <input type="text" name="theid" id="theid" placeholder="E.g.: 22723">
             <p>File Path:</p>
-            <input type="text" name="folder" id="folder">
+            <button id="openfile" onclick="openButton()">Choose folder...</button>
             <p>Language:</p>
             <input type="text" name="lang" id="lang" placeholder="E.g.: English, French, Polish etc.">
             <div id="numb" style="display:none;">
@@ -37,7 +37,7 @@
 
             <br>
             <button type="submit" id="submit"
-                onclick="scrape(document.getElementById('theid').value,document.getElementById('folder').value)">Scrape</button>
+                onclick="scrape(document.getElementById('theid').value)">Scrape</button>
         </div>
         <div id="info">
             <p id="percentage"></p>

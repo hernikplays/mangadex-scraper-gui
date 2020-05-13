@@ -3,10 +3,11 @@ const unirest = require('unirest');
 const fs = require('fs')
 const request = require('request');
 const swal = require("sweetalert")
-const electron = require("electron")
+const {electron,dialog} = require("electron").remote
 const {
     zip
 } = require('zip-a-folder');
+
 
 const version = "2.1"
 
@@ -14,12 +15,13 @@ document.getElementById("lang").value = "English"; //set lang because Im lazy
 document.getElementById("number").value = "1";
 console.log(process.platform)
 
-if (process.platform == "linux") {
+/*if (process.platform == "linux") {
     document.getElementById("folder").placeholder = "/home/youruserhere/Documents";
 } else if (process.platform == "win32") {
     document.getElementById("folder").placeholder = "C:/Users/You/Documents";
-}
+}*/
 var i = 0;
+let file;
 
 function loop(chaps, path, manga) {
 
@@ -54,13 +56,16 @@ function loop(chaps, path, manga) {
     }, 3000, chaps, path, manga)
 }
 
-function scrape(id, filePath) {
+function scrape(id) {
+    
+    console.log(filePath)
+    
     if (!id) {
         swal("Missing ID", "Please enter a manga ID from MangaDex", "error")
         return;
     }
     if (!filePath) {
-        swal("Missing File Path", "Please enter a path to a folder e.g. C:/Users/YourName/Documents", "error")
+        swal("Missing File Path", "Please choose a folder where to save the manga", "error")
         return
     }
     if (!document.getElementById("lang").value) {
@@ -296,4 +301,15 @@ function zipit(path) {
 
     ZipAFolder.main();
 
+}
+
+function openButton(){
+    dialog.showOpenDialog({ properties: ['openDirectory'] }).then(result => {
+        if(result.canceled == true){
+            console.log(result.canceled)
+        }
+        else{
+        filePath = result.filePaths;
+    }
+      })
 }
