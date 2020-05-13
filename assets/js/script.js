@@ -3,6 +3,7 @@ const unirest = require('unirest');
 const fs = require('fs')
 const request = require('request');
 const swal = require("sweetalert")
+<<<<<<< HEAD
 const {electron,dialog} = require("electron").remote
 const {
     zip
@@ -10,8 +11,14 @@ const {
 
 
 const version = "2.1"
+=======
+const electron = require("electron")
 
-document.getElementById("lang").value = "English"; //set lang because Im lazy
+const version = "2.0"
+>>>>>>> parent of 19c2a70... implementing automatic packaging into .cbz
+
+//document.getElementById("folder").value = __dirname; // sets folder input to the current folder the EXE is located in
+document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
 document.getElementById("number").value = "1";
 console.log(process.platform)
 
@@ -48,6 +55,7 @@ function loop(chaps, path, manga) {
                 }
             }, );
         })
+<<<<<<< HEAD
 
         if (i = chaps.length) {
             if (document.getElementById("zipbox").checked == "on") {
@@ -55,6 +63,14 @@ function loop(chaps, path, manga) {
             } else {
                 document.getElementById("percentage").innerHTML = `Download Complete`
             }
+=======
+        i++;
+        if (i < chaps.length) {
+            document.getElementById("percentage").innerHTML = `Downloaded ${i} chapters out of ${chaps.length}`
+            loop(chaps, path, manga);
+        } else {
+            document.getElementById("percentage").innerHTML = `Download Complete`
+>>>>>>> parent of 19c2a70... implementing automatic packaging into .cbz
         }
     }, 3000, chaps, path, manga)
 }
@@ -132,7 +148,7 @@ function scrape(id) {
                     console.log("Push success")
 
                 }
-
+                
                 console.log(filchap)
                 loop(filchap, filePath, manga)
                 return;
@@ -148,7 +164,7 @@ function scrape(id) {
                 let id = chaps[chapternum - 1].id
                 Mangadex.getChapter(id).then(chapter => {
                     console.log(chapter)
-                    chapter.page_array.forEach(function (link, index, array) {
+                    chapter.page_array.forEach(function (link, index, array) { 
                         console.log(chapter)
                         if (chapter.volume == "" && chapter.chapter == "") {
                             dlChap("Unknown", chapter.title, link, index + 1, manga, filePath, chapter.group)
@@ -282,6 +298,7 @@ function checkVersion() { //check if new version was released on GitHub
 
             } else console.log("Latest version")
         })
+<<<<<<< HEAD
 }
 
 function zipit(path) {
@@ -307,4 +324,6 @@ function openButton(){
         console.log(result.filePaths)
     }
       })
+=======
+>>>>>>> parent of 19c2a70... implementing automatic packaging into .cbz
 }
