@@ -17,7 +17,7 @@
             <p>Manga ID:</p>
             <input type="text" name="theid" id="theid" placeholder="E.g.: 22723">
             <p>File Path:</p>
-            <input type="text" name="folder" id="folder">
+            <button id="openfolder" onclick="openfolder()">Choose folder...</button>
             <p>Language:</p>
             <input type="text" name="lang" id="lang" placeholder="E.g.: English, French, Polish etc.">
             <div id="numb" style="display:none;">
@@ -32,13 +32,15 @@
                 <option value="all">All chapters available</option>
                 <option value="ch">Single/Range of Chapters</option>
             </select>
-
+            <p>Zip chapters into .CBZ</p>
+            <input type="checkbox" id="zipbox">
             <br>
             <button type="submit" id="submit"
-                onclick="scrape(document.getElementById('theid').value,document.getElementById('folder').value)">Scrape</button>
+                onclick="scrape(document.getElementById('theid').value)">Scrape</button>
         </div>
         <div id="info">
             <p id="percentage"></p>
+            <p id="footer">(Very inaccurate, check console for progress report)</p>
             <img id="cover" src="" width=20% style="margin-top: 15px;">
             <div id="ge">
                 <p id="label">Name: </p>

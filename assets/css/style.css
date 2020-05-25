@@ -39,7 +39,6 @@ button {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin-top: 20px;
     border-radius: 5px;
 }
 button:hover {
@@ -76,4 +75,13 @@ input {
 #info{
     margin-top: -5px;
     font-size:13px;
+}
+
+#submit{
+    margin-top: 20px;
+}
+input#zipbox{
+    height:30px;
+    margin-top:-10px;
+    padding:0;
 }

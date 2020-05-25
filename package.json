@@ -8,7 +8,9 @@
     "minimist": "^1.2.5",
     "request": "^2.88.2",
     "sweetalert": "^2.1.2",
-    "unirest": "^0.6.0"
+    "tmp": "^0.2.1",
+    "unirest": "^0.6.0",
+    "zip-a-folder": "0.0.12"
   },
   "devDependencies": {
     "electron": "^8.1.1",
