@@ -1,6 +1,6 @@
 {
   "name": "mangadex-scraper-gui",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "MangaDex scraper with GUI",
   "main": "main.js",
   "dependencies": {
