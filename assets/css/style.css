@@ -66,12 +66,13 @@ input {
 #label{
     margin-bottom:-5px;
 }
-#footer{
+#footer,#inacc{
     text-align: center;
     font-size: 10px;
     color: #FF773D;
     margin-top: 50px;
 }
+
 #info{
     margin-top: -5px;
     font-size:13px;

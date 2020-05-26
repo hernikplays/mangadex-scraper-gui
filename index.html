@@ -9,7 +9,7 @@
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
 </head>
 
-<body onload="checkVersion()">
+<body onload="checkVersion();">
     <div id="content">
         <h1>MangaDex GUI Scraper</h1>
         <h2>Made by hernikplays</h2>
@@ -35,12 +35,11 @@
             <p>Zip chapters into .CBZ</p>
             <input type="checkbox" id="zipbox">
             <br>
-            <button type="submit" id="submit"
-                onclick="scrape(document.getElementById('theid').value)">Scrape</button>
+            <button type="submit" id="submit" onclick="scrape(document.getElementById('theid').value)">Scrape</button>
         </div>
         <div id="info">
             <p id="percentage"></p>
-            <p id="footer">(Very inaccurate, check console for progress report)</p>
+            <p id="inacc">(Very inaccurate, check console for progress report)</p>
             <img id="cover" src="" width=20% style="margin-top: 15px;">
             <div id="ge">
                 <p id="label">Name: </p>

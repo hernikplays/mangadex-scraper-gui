@@ -12,7 +12,7 @@ const {
 } = require("zip-a-folder")
 const tmp = require("tmp")
 
-const version = "2.1"
+const version = "3.0"
 
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
 document.getElementById("number").value = "1";
@@ -21,18 +21,25 @@ var i = 0;
 var filePath;
 const tmpobj = tmp.dirSync();
 
+
+
+document.getElementById("inacc").style.display = "none";
+document.getElementById("label").style.display = "none";
+
+
 function loop(chaps, path, manga) {
 
     setTimeout(function () {
-        console.log(chaps)
+        
         console.log(i)
         let group = chaps[i].group_name
+       
         Mangadex.getChapter(chaps[i].id).then(chapter => {
             if (chapter.page_array.length == 0) return swal("Error!", "There was an error fetching the pages of chapter\nMake sure that the chapter is not available on the author's page for free", "error")
 
             chapter.page_array.forEach(function (link, index, array) { //download each page of chapter
 
-                console.log(chapter)
+                
                 if (chapter.volume == "" && chapter.chapter == "") {
                     dlChap("Unknown", chapter.title, link, index + 1, manga, path, chapter.group)
                 } else if (chapter.volume == "" && chapter.volume !== "") {
@@ -45,11 +52,14 @@ function loop(chaps, path, manga) {
             }, );
         })
         i++;
+        document.getElementById("inacc").style.display = "inherit";
         if (i < chaps.length) {
             document.getElementById("percentage").innerHTML = `Downloaded ${i} chapters out of ${chaps.length}`
             loop(chaps, path, manga);
         } else {
             document.getElementById("percentage").innerHTML = `Download Complete`
+            i=0;
+            totalChaps=0
         }
     }, 3000, chaps, path, manga)
 }
@@ -61,24 +71,24 @@ async function dlChap(vol, chap, link, pos, manga, path, group) { //download fun
 
     let mangatitle = manga.title.replace(/[/\\?%*:|"<>]/g, '')
     let groupname = group.replace(/[/\\?%*:|"<>]/g, '')
-    if (document.getElementById("zipbox").checked == "off") {
+    if (document.getElementById("zipbox").checked == false) {
         if (process.platform == "win32") {
 
             if (!fs.existsSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`)) {
                 fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`, {
                     recursive: true
                 })
-                console.log("Windows")
+                
             }
             if (pos <= 9) {
                 const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\0${pos}.${link.split('.').pop()}`);
                 dlTO(file, link, chap, vol, groupname)
-                return console.log("Downloaded")
+                
             } else {
                 const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\${pos}.${link.split('.').pop()}`);
                 dlTO(file, link, chap, vol, groupname)
 
-                return console.log("Downloaded")
+                
             }
         } else if (process.platform == "linux") {
             console.log(path)
@@ -90,12 +100,12 @@ async function dlChap(vol, chap, link, pos, manga, path, group) { //download fun
             if (pos <= 9) {
                 const file = fs.createWriteStream(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}/0${pos}.${link.split('.').pop()}`);
                 dlTO(file, link, chap, vol, groupname)
-                return console.log("Downloaded")
+                
             } else {
                 const file = fs.createWriteStream(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}/${pos}.${link.split('.').pop()}`);
                 dlTO(file, link, chap, vol, groupname)
 
-                return console.log("Downloaded")
+                
             }
         } else if (process.platform == "darwin") {
             swal("Coming soon")
@@ -113,13 +123,13 @@ async function dlChap(vol, chap, link, pos, manga, path, group) { //download fun
                 let temp = `${tmpobj.name}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`
                 const file = fs.createWriteStream(`${tmpobj.name}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\0${pos}.${link.split('.').pop()}`);
                 dlTO(file, link, chap, vol, groupname, path, temp)
-                return console.log("Downloaded")
+                
             } else {
                 let temp = `${tmpobj.name}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`
                 const file = fs.createWriteStream(`${tmpobj.name}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\${pos}.${link.split('.').pop()}`);
                 dlTO(file, link, chap, vol, groupname, path, temp)
 
-                return console.log("Downloaded")
+               
             }
         } else if (process.platform == "linux") {
             if (!fs.existsSync(`${tmpobj.name}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`)) {
@@ -131,13 +141,13 @@ async function dlChap(vol, chap, link, pos, manga, path, group) { //download fun
                 let temp = `${tmpobj.name}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`
                 const file = fs.createWriteStream(`${tmpobj.name}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}/0${pos}.${link.split('.').pop()}`);
                 dlTO(file, link, chap, vol, groupname, path, temp)
-                return console.log("Downloaded")
+                
             } else {
                 let temp = `${tmpobj.name}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`
                 const file = fs.createWriteStream(`${tmpobj.name}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}/${pos}.${link.split('.').pop()}`);
                 dlTO(file, link, chap, vol, groupname, path, temp)
 
-                return console.log("Downloaded")
+                
             }
         } else if (process.platform == "darwin") {
             swal("Coming soon")
@@ -159,7 +169,7 @@ function change(value) { //function to display the "chapter number" input on fro
 
  function dlTO(file, link, chap, vol, groupname, path, temp) {
     setTimeout(function () {
-        console.log(`Downloading ${link}`)
+        
         var out = request({
             uri: link
         });
@@ -170,14 +180,15 @@ function change(value) { //function to display the "chapter number" input on fro
 
                 console.log("OK")
             } else {
-                console.error("No file found at given url.")
+                swal("Error while downloading chapter","No file found at given url.","error")
             }
         })
-        out.on('complete', function(resp){
-            console.log(resp)
-            
+        out.on('complete', function(resp){            
             file.on('close', function () {
+                console.log("Downloaded file")
+                if(document.getElementById("zipbox").checked == true){
                 ZipAFolder.main(temp, chap, vol, groupname, path)
+                }
             });
         })
 
@@ -188,7 +199,6 @@ function checkVersion() { //check if new version was released on GitHub
     unirest.get("https://api.github.com/repos/hernikplays/mangadex-scraper-gui/releases/latest")
         .header("User-Agent", "hernikplays")
         .end(function (response) {
-            console.log(response.body.tag_name)
             if (response.body.tag_name > version) {
                 swal({
                         title: "There is a new version available",
@@ -197,7 +207,6 @@ function checkVersion() { //check if new version was released on GitHub
                         buttons: ["Download", "Cancel"],
                     })
                     .then((value) => {
-                        console.log(value)
                         if (!value) {
                             electron.shell.openExternal(response.body.html_url);
                         }
@@ -208,6 +217,7 @@ function checkVersion() { //check if new version was released on GitHub
 }
 
 function openfolder() {
+    console.log(document.getElementById("info").style.display)
     dialog.showOpenDialog({
         properties: ['openDirectory']
     }).then(result => {
@@ -253,7 +263,8 @@ function scrape(id) {
         manga,
         chapter
     }) => {
-
+        document.getElementById("name").style.display = "inherit";
+        console.log(document.getElementById("info").style.display)
         var cover = manga.cover_url.replace("cdndex.com", "mangadex.org") //bad link in api, replace it with right
         document.getElementById("cover").src = cover;
         document.getElementById("name").innerHTML = manga.title
@@ -272,7 +283,7 @@ function scrape(id) {
             }
 
             //console.log(chaps)
-
+            
             loop(chaps, filePath, manga)
 
         } else if (document.getElementById("selop").options[document.getElementById("selop").selectedIndex].value == "ch") {
@@ -306,32 +317,35 @@ function scrape(id) {
                     console.log("Push success")
 
                 }
-
+                
                 console.log(filchap)
                 loop(filchap, filePath, manga)
                 return;
             } else {
-
+                var chaps = []
                 for (var i = 0; i < chapter.length; i++) { //filters chapters to selected language
                     if (chapter[i].lang_name.toLowerCase() == document.getElementById("lang").value.toLowerCase()) {
                         chaps.push(chapter[i])
                         console.log("Push success")
                     }
                 }
-
+                
                 let id = chaps[chapternum - 1].id
+                let group = chaps[0].group_name
+                let groupname = group.replace(/[/\\?%*:|"<>]/g, '')
                 Mangadex.getChapter(id).then(chapter => {
+                    
                     console.log(chapter)
                     chapter.page_array.forEach(function (link, index, array) {
                         console.log(chapter)
                         if (chapter.volume == "" && chapter.chapter == "") {
-                            dlChap("Unknown", chapter.title, link, index + 1, manga, filePath, chapter.group)
+                            dlChap("Unknown", chapter.title, link, index + 1, manga, filePath, groupname)
                         } else if (chapter.volume == "" && chapter.volume !== "") {
-                            dlChap("Unknown", chapter.chapter, link, index + 1, manga, filePath, chapter.group)
+                            dlChap("Unknown", chapter.chapter, link, index + 1, manga, filePath, groupname)
                         } else if (chapter.volume !== "" && chapter.volume == "") {
-                            dlChap(chapter.volume, chapter.title, link, index + 1, manga, filePath, chapter.group)
+                            dlChap(chapter.volume, chapter.title, link, index + 1, manga, filePath, groupname)
                         } else {
-                            dlChap(chapter.volume, chapter.chapter, link, index + 1, manga, filePath, group)
+                            dlChap(chapter.volume, chapter.chapter, link, index + 1, manga, filePath, groupname)
                         }
                     }, );
 
