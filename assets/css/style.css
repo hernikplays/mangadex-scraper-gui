@@ -60,17 +60,23 @@ input {
     font-family: 'Ubuntu', sans-serif;
 }
 #percentage{
-    margin-top: 8px;
+    font-size: 25px;
+    margin-top: 10px;
     margin-bottom: -5px;
 }
 #label{
     margin-bottom:-5px;
 }
-#footer,#inacc{
+#footer{
     text-align: center;
     font-size: 10px;
     color: #FF773D;
     margin-top: 50px;
+}
+#inacc{
+    text-align: center;
+    font-size: 10px;
+    color: #FF773D;
 }
 
 #info{
@@ -85,4 +91,7 @@ input#zipbox{
     height:30px;
     margin-top:-10px;
     padding:0;
+}
+#name{
+    font-size: 20px;
 }

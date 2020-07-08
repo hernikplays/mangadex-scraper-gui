@@ -12,12 +12,15 @@ const {
 } = require("zip-a-folder")
 const tmp = require("tmp")
 
-const version = "3.0"
+const version = "3.1"
 
 document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
 document.getElementById("number").value = "1";
 
+let running = false;
+
 var i = 0;
+let downlImages = 0;
 var filePath;
 const tmpobj = tmp.dirSync();
 
@@ -52,14 +55,14 @@ function loop(chaps, path, manga) {
             }, );
         })
         i++;
-        document.getElementById("inacc").style.display = "inherit";
+        
         if (i < chaps.length) {
-            document.getElementById("percentage").innerHTML = `Downloaded ${i} chapters out of ${chaps.length}`
+            
             loop(chaps, path, manga);
         } else {
-            document.getElementById("percentage").innerHTML = `Download Complete`
+            //document.getElementById("percentage").innerHTML = `Download Complete`
             i=0;
-            totalChaps=0
+            
         }
     }, 3000, chaps, path, manga)
 }
@@ -91,7 +94,6 @@ async function dlChap(vol, chap, link, pos, manga, path, group) { //download fun
                 
             }
         } else if (process.platform == "linux") {
-            console.log(path)
             if (!fs.existsSync(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`)) {
                 fs.mkdirSync(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`, {
                     recursive: true
@@ -117,7 +119,6 @@ async function dlChap(vol, chap, link, pos, manga, path, group) { //download fun
                 fs.mkdirSync(`${tmpobj.name}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`, {
                     recursive: true
                 })
-                console.log("Windows")
             }
             if (pos <= 9) {
                 let temp = `${tmpobj.name}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`
@@ -174,7 +175,6 @@ function change(value) { //function to display the "chapter number" input on fro
             uri: link
         });
         out.on('response', async function (resp) {
-            console.log(resp)
             if (resp.statusCode === 200) {
                 out.pipe(file);
 
@@ -185,6 +185,9 @@ function change(value) { //function to display the "chapter number" input on fro
         })
         out.on('complete', function(resp){            
             file.on('close', function () {
+                downlImages++
+                document.getElementById("percentage").innerHTML = `Downloaded ${downlImages} pages`
+                document.getElementById("inacc").style.display = "inherit";
                 console.log("Downloaded file")
                 if(document.getElementById("zipbox").checked == true){
                 ZipAFolder.main(temp, chap, vol, groupname, path)
@@ -217,17 +220,13 @@ function checkVersion() { //check if new version was released on GitHub
 }
 
 function openfolder() {
-    console.log(document.getElementById("info").style.display)
     dialog.showOpenDialog({
         properties: ['openDirectory']
     }).then(result => {
         if (result.canceled) {
-            console.log("cancelled selection")
             return;
         } else {
-            console.log(result.filePaths[0])
             filePath = result.filePaths[0]
-            console.log(filePath)
         }
     }).catch(err => {
         console.log(err)
@@ -238,15 +237,19 @@ class ZipAFolder {
 
     static async main(path, chap, vol, groupname, actualpath) {
         if (process.platform == "win32") {
-            console.log(path)
             await zip(path, `${actualpath}\\Vol. ${vol} Ch. ${chap} - ${groupname}.cbz`);
+            console.log("Zipping to " + actualpath)
+        }
+        else if(process.platform == "linux"){
+            await zip(path, `${actualpath}/Vol. ${vol} Ch. ${chap} - ${groupname}.cbz`);
             console.log("Zipping to " + actualpath)
         }
     }
 }
 
 function scrape(id) {
-    console.log(filePath)
+    if(running == true) return swal("Error", "Scraper is already running!\nPlease wait before it completes or restart the application.", "error")
+    downlImages = 0;
     if (!id) {
         swal("Missing ID", "Please enter a manga ID from MangaDex", "error")
         return;
@@ -264,29 +267,25 @@ function scrape(id) {
         chapter
     }) => {
         document.getElementById("name").style.display = "inherit";
-        console.log(document.getElementById("info").style.display)
         var cover = manga.cover_url.replace("cdndex.com", "mangadex.org") //bad link in api, replace it with right
         document.getElementById("cover").src = cover;
         document.getElementById("name").innerHTML = manga.title
         // document.getElementById("info").style.display = "initial"; //show info
 
         if (document.getElementById("selop").options[document.getElementById("selop").selectedIndex].value == "all") {
-
+            running = true;
 
             var chaps = []
 
             for (var i = 0; i < chapter.length; i++) { //filters chapters to selected language
                 if (chapter[i].lang_name.toLowerCase() == document.getElementById("lang").value.toLowerCase()) {
                     chaps.push(chapter[i])
-                    console.log("Push success")
                 }
-            }
-
-            //console.log(chaps)
-            
+            }            
             loop(chaps, filePath, manga)
 
         } else if (document.getElementById("selop").options[document.getElementById("selop").selectedIndex].value == "ch") {
+            running = true;
 
             let chapternum = document.getElementById('number').value
             if (chapternum == 0) {
@@ -300,7 +299,6 @@ function scrape(id) {
             if (chapternum.includes("-")) {
                 let to = chapternum.substring(chapternum.indexOf('-') + 1);
                 let from = chapternum.substring(0, chapternum.indexOf('-'));
-                console.log(from + "/" + to)
                 var chaps = []
 
                 for (var i = 0; i < chapter.length; i++) { //filters chapters to selected language
@@ -312,13 +310,11 @@ function scrape(id) {
 
                 let filchap = [];
                 for (var i = from - 1; i < to; i++) {
-                    console.log(i)
                     filchap.push(chaps[i])
                     console.log("Push success")
 
                 }
                 
-                console.log(filchap)
                 loop(filchap, filePath, manga)
                 return;
             } else {
@@ -335,9 +331,7 @@ function scrape(id) {
                 let groupname = group.replace(/[/\\?%*:|"<>]/g, '')
                 Mangadex.getChapter(id).then(chapter => {
                     
-                    console.log(chapter)
                     chapter.page_array.forEach(function (link, index, array) {
-                        console.log(chapter)
                         if (chapter.volume == "" && chapter.chapter == "") {
                             dlChap("Unknown", chapter.title, link, index + 1, manga, filePath, groupname)
                         } else if (chapter.volume == "" && chapter.volume !== "") {
@@ -352,9 +346,6 @@ function scrape(id) {
                 })
             }
         }
-
-
-
     }) //gets manga info
 
 
