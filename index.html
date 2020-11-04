@@ -6,49 +6,24 @@
     <title>MangaDex Scraper by hernikplays</title>
     <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <link rel="stylesheet" href="node_modules/@sweetalert2/theme-dark/dark.css">
 </head>
 
 <body onload="checkVersion();">
     <div id="content">
-        <h1>MangaDex GUI Scraper</h1>
-        <h2>Made by hernikplays</h2>
-        <div id="values">
-            <p>Manga ID:</p>
-            <input type="text" name="theid" id="theid" placeholder="E.g.: 22723">
-            <p>File Path:</p>
-            <button id="openfolder" onclick="openfolder()">Choose folder...</button>
-            <p>Language:</p>
-            <input type="text" name="lang" id="lang" placeholder="E.g.: English, French, Polish etc.">
-            <div id="numb" style="display:none;">
-                <p id="chapnum">Chapter Number</p>
-                <p id="info">(Note: if there is a chapter without number, it will appear before the chapter marked as
-                    first)</p>
-                <input type="text" name="number" id="number" placeholder="1" pattern="^[1–9-]$">
-            </div>
-            <p>What to download:</p>
-            <select id="selop"
-                onchange="change(document.getElementById('selop').options[document.getElementById('selop').selectedIndex].value)">
-                <option value="all">All chapters available</option>
-                <option value="ch">Single/Range of Chapters</option>
-            </select>
-            <p>Zip chapters into .CBZ</p>
-            <input type="checkbox" id="zipbox">
-            <br>
-            <button type="submit" id="submit" onclick="scrape(document.getElementById('theid').value)">Scrape</button>
+        <div id="input">
+            <label for="dexlink">MangaDex manga URL</label><br>
+            <input type="url" name="dexlink" id="dexlink" placeholder="https://mangadex.org/title/40646/nega-kun-and-posi-chan"><br>
+            <label for="lang">Language</label><br>
+            <input type="text" name="lang" id="lang" value="English"><br>
+            <button onclick="start()">Scrape</button>
         </div>
-        <div id="info"><br>
-            <p id="percentage"></p>
-            <p id="inacc">(Check console for more details [F12])</p>
-            <img id="cover" src="" width=20% style="margin-top: 15px;">
-            <div id="ge">
-                <p id="label">Name: </p>
-                <p id="name"></p>
-            </div>
+        <div id="info">
+            <img src="" id="cover" alt="Manga Cover">
+            <h1 id="title"></h1>
         </div>
-        <p id="footer">Suggest features or report bugs at <u>github.com/hernikplays/mangadex-scraper-gui</u></p>
-        <script src="assets/js/script.js"></script>
     </div>
+    <script src="assets/js/script.js"></script>
 </body>
 
 </html>

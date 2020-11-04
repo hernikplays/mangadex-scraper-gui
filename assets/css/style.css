@@ -1,97 +1,48 @@
 #content {
     text-align: center;
-
 }
 
-body {
-    background-color: #272932;
+body,html {
+    background-color: #272727;
+    color:white;
     font-family: 'Oswald', sans-serif;
-
-}
-
-h1 {
-    color: whitesmoke;
-    text-align: center;
-    font-size: 30px;
-    font-weight: bold;
-
-}
-
-h2 {
-    color: whitesmoke;
-    font-family: 'Ubuntu', sans-serif;
-
-}
-
-p {
-    color: #FF773D;
-    font-family: 'Ubuntu', sans-serif;
-    font-size: 18x;
-    font-weight: bolder;
-}
-
-button {
-    background-color: #FF773D;
-    border: none;
-    color: white;
-    padding: 5px 15px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 5px;
-}
-button:hover {
-    background-color:#cc5f30;; 
-    color: white;
-}
-button:active {
-    background-color:#7f3b1e; 
-    color: white;
-}
-input {
-    width: 30%;
-    padding: 12px 20px;
-    margin-top: -8px;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-family: 'Ubuntu', sans-serif;
-}
-#percentage{
-    font-size: 25px;
-    margin-top: 10px;
-    margin-bottom: -5px;
-}
-#label{
-    margin-bottom:-5px;
-}
-#footer{
-    text-align: center;
-    font-size: 10px;
-    color: #FF773D;
-    margin-top: 50px;
-}
-#inacc{
-    text-align: center;
-    font-size: 10px;
-    color: #FF773D;
-}
-
-#info{
-    margin-top: -5px;
-    font-size:13px;
-}
-
-#submit{
-    margin-top: 20px;
-}
-input#zipbox{
-    height:30px;
-    margin-top:-10px;
     padding:0;
+    margin:0;
+    height: 100%;
+    width: 100%;
 }
-#name{
-    font-size: 20px;
+label{
+    font-size: 30px;
+}
+h1{
+    font-size: 40px;
+    font-weight: bold;
+}
+img{
+    height: 600px;
+}
+input{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border:none;
+    border-radius: 4px;
+    width: 300px;
+    height: 30px;
+    font-size: 17px;
+}
+button{
+    margin-top: 10px;
+    width: 100px;
+    height: 40px;
+    border:none;
+    border-radius: 2px;
+    background-color:rgb(230, 149, 0);
+    color:white;
+    transition: background-color 0.2s;
+}
+button:hover{
+    background-color: rgb(179, 116, 0);;
+}
+button:active{
+    background-color: rgb(133, 86, 1);;
 }

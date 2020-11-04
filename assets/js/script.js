@@ -1,352 +1,60 @@
 const Mangadex = require("mangadex-api")
-const unirest = require('unirest');
+const axios = require('axios').default;
 const fs = require('fs')
 const request = require('request');
-const swal = require("sweetalert")
+const Swal = require('sweetalert2')
 const {
     electron,
-    dialog
+    dialog,
+    shell
 } = require("electron").remote
-const {
-    zip
-} = require("zip-a-folder")
-const tmp = require("tmp")
+const mangadex = require("mangadex-api")
 
-const version = "3.1"
-
-document.getElementById("lang").value = "English"; //set lang automatically because Im lazy
-document.getElementById("number").value = "1";
-
-let running = false;
-
-var i = 0;
-let downlImages = 0;
-var filePath;
-const tmpobj = tmp.dirSync();
-
-
-
-document.getElementById("inacc").style.display = "none";
-document.getElementById("label").style.display = "none";
-
-
-function loop(chaps, path, manga) {
-
-    setTimeout(function () {
-        
-        console.log(i)
-        let group = chaps[i].group_name
-       
-        Mangadex.getChapter(chaps[i].id).then(chapter => {
-            if (chapter.page_array.length == 0) return swal("Error!", "There was an error fetching the pages of chapter\nMake sure that the chapter is not available on the author's page for free", "error")
-
-            chapter.page_array.forEach(function (link, index, array) { //download each page of chapter
-
-                
-                if (chapter.volume == "" && chapter.chapter == "") {
-                    dlChap("Unknown", chapter.title, link, index + 1, manga, path, chapter.group)
-                } else if (chapter.volume == "" && chapter.volume !== "") {
-                    dlChap("Unknown", chapter.chapter, link, index + 1, manga, path, chapter.group)
-                } else if (chapter.volume !== "" && chapter.volume == "") {
-                    dlChap(chapter.volume, chapter.title, link, index + 1, manga, path, chapter.group)
-                } else {
-                    dlChap(chapter.volume, chapter.chapter, link, index + 1, manga, path, group)
-                }
-            }, );
-        })
-        i++;
-        
-        if (i < chaps.length) {
-            
-            loop(chaps, path, manga);
-        } else {
-            //document.getElementById("percentage").innerHTML = `Download Complete`
-            i=0;
-            
-        }
-    }, 3000, chaps, path, manga)
-}
-
-
-
-async function dlChap(vol, chap, link, pos, manga, path, group) { //download function
-
-
-    let mangatitle = manga.title.replace(/[/\\?%*:|"<>]/g, '')
-    let groupname = group.replace(/[/\\?%*:|"<>]/g, '')
-    if (document.getElementById("zipbox").checked == false) {
-        if (process.platform == "win32") {
-
-            if (!fs.existsSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`)) {
-                fs.mkdirSync(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`, {
-                    recursive: true
-                })
-                
-            }
-            if (pos <= 9) {
-                const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\0${pos}.${link.split('.').pop()}`);
-                dlTO(file, link, chap, vol, groupname)
-                
-            } else {
-                const file = fs.createWriteStream(`${path}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\${pos}.${link.split('.').pop()}`);
-                dlTO(file, link, chap, vol, groupname)
-
-                
-            }
-        } else if (process.platform == "linux") {
-            if (!fs.existsSync(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`)) {
-                fs.mkdirSync(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`, {
-                    recursive: true
-                })
-            }
-            if (pos <= 9) {
-                const file = fs.createWriteStream(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}/0${pos}.${link.split('.').pop()}`);
-                dlTO(file, link, chap, vol, groupname)
-                
-            } else {
-                const file = fs.createWriteStream(`${path}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}/${pos}.${link.split('.').pop()}`);
-                dlTO(file, link, chap, vol, groupname)
-
-                
-            }
-        } else if (process.platform == "darwin") {
-            swal("Coming soon")
-        }
-    } else {
-        if (process.platform == "win32") {
-
-            if (!fs.existsSync(`${tmpobj.name}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`)) {
-                fs.mkdirSync(`${tmpobj.name}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`, {
-                    recursive: true
-                })
-            }
-            if (pos <= 9) {
-                let temp = `${tmpobj.name}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`
-                const file = fs.createWriteStream(`${tmpobj.name}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\0${pos}.${link.split('.').pop()}`);
-                dlTO(file, link, chap, vol, groupname, path, temp)
-                
-            } else {
-                let temp = `${tmpobj.name}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}`
-                const file = fs.createWriteStream(`${tmpobj.name}\\${mangatitle}\\Vol. ${vol} Ch. ${chap} - ${groupname}\\${pos}.${link.split('.').pop()}`);
-                dlTO(file, link, chap, vol, groupname, path, temp)
-
-               
-            }
-        } else if (process.platform == "linux") {
-            if (!fs.existsSync(`${tmpobj.name}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`)) {
-                fs.mkdirSync(`${tmpobj.name}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`, {
-                    recursive: true
-                })
-            }
-            if (pos <= 9) {
-                let temp = `${tmpobj.name}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`
-                const file = fs.createWriteStream(`${tmpobj.name}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}/0${pos}.${link.split('.').pop()}`);
-                dlTO(file, link, chap, vol, groupname, path, temp)
-                
-            } else {
-                let temp = `${tmpobj.name}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}`
-                const file = fs.createWriteStream(`${tmpobj.name}/${mangatitle}/Vol. ${vol} Ch. ${chap} - ${groupname}/${pos}.${link.split('.').pop()}`);
-                dlTO(file, link, chap, vol, groupname, path, temp)
-
-                
-            }
-        } else if (process.platform == "darwin") {
-            swal("Coming soon")
-        }
-
-    }
-
-
-
-}
-
-function change(value) { //function to display the "chapter number" input on frontend
-    if (value == "all") {
-        document.getElementById("numb").style.display = "none";
-    } else {
-        document.getElementById("numb").style.display = "contents";
-    }
-}
-
- function dlTO(file, link, chap, vol, groupname, path, temp) {
-    setTimeout(function () {
-        
-        var out = request({
-            uri: link
-        });
-        out.on('response', async function (resp) {
-            if (resp.statusCode === 200) {
-                out.pipe(file);
-
-                console.log("OK")
-            } else {
-                swal("Error while downloading chapter","No file found at given url.","error")
-            }
-        })
-        out.on('complete', function(resp){            
-            file.on('close', function () {
-                downlImages++
-                document.getElementById("percentage").innerHTML = `Downloaded ${downlImages} pages`
-                document.getElementById("inacc").style.display = "inherit";
-                console.log("Downloaded file")
-                if(document.getElementById("zipbox").checked == true){
-                ZipAFolder.main(temp, chap, vol, groupname, path)
-                }
-            });
-        })
-
-    }, 3000)
-}
+const version = "4.0"
+document.getElementById("info").style.display = "none";
 
 function checkVersion() { //check if new version was released on GitHub
-    unirest.get("https://api.github.com/repos/hernikplays/mangadex-scraper-gui/releases/latest")
-        .header("User-Agent", "hernikplays")
-        .end(function (response) {
-            if (response.body.tag_name > version) {
-                swal({
-                        title: "There is a new version available",
-                        text: "Click on Download to open the browser and download the new version!",
-                        icon: "warning",
-                        buttons: ["Download", "Cancel"],
-                    })
-                    .then((value) => {
-                        if (!value) {
-                            electron.shell.openExternal(response.body.html_url);
-                        }
-                    });
-
-            } else console.log("Latest version")
+    axios.get("https://api.github.com/repos/hernikplays/mangadex-scraper-gui/releases/latest")
+        .then((res) => {
+            if (res.data.tag_name > version) return Swal.fire({
+                title: "New version found",
+                text: "New version has been released, press OK to open your browser and download it.",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'OK',
+                cancelButtonText: 'Cancel'
+            })
+            .then((result)=>{
+                console.log(result)
+                console.log(res)
+                if(result.isConfirmed) {
+                    shell.openExternal(res.data.html_url);
+                }
+            })
+            console.log(res.data.tag_name)
         })
-}
+        .catch((e) => {
+            console.log(e)
+            if (e) {
+                Swal.fire("Something happened...", e.message, "error")
+            }
+        })
 
-function openfolder() {
-    dialog.showOpenDialog({
-        properties: ['openDirectory']
-    }).then(result => {
-        if (result.canceled) {
-            return;
-        } else {
-            filePath = result.filePaths[0]
-        }
-    }).catch(err => {
-        console.log(err)
+}
+// Prechecks
+function start(){
+    let url = document.getElementById("dexlink").value;
+    if(!url||!/mangadex\.org\/title\/[0-9]+\/[a-z\-]*/gm.test(url)) return Swal.fire("Error!", "You need to enter a MangaDex Title/Manga URL, like <u>https://mangadex.org/title/40646/nega-kun-and-posi-chan</u>",'error')
+    let id = /\/[0-9]+\//g.exec(url)
+    if(!id) return Swal.fire("Error!","There was an error finding ID from the URL you submitted","error")
+    scrape(id)
+}
+// Start scraping!!!
+function scrape(id){
+    mangadex.getManga(id).then(({manga, chapter, group})=>{
+        console.log(manga)
+        document.getElementById("info").style.display = "block";
+        document.getElementById("cover").src = manga.cover_url
+        document.getElementById("title").innerText = manga.title
     })
-}
-
-class ZipAFolder {
-
-    static async main(path, chap, vol, groupname, actualpath) {
-        if (process.platform == "win32") {
-            await zip(path, `${actualpath}\\Vol. ${vol} Ch. ${chap} - ${groupname}.cbz`);
-            console.log("Zipping to " + actualpath)
-        }
-        else if(process.platform == "linux"){
-            await zip(path, `${actualpath}/Vol. ${vol} Ch. ${chap} - ${groupname}.cbz`);
-            console.log("Zipping to " + actualpath)
-        }
-    }
-}
-
-function scrape(id) {
-    if(running == true) return swal("Error", "Scraper is already running!\nPlease wait before it completes or restart the application.", "error")
-    downlImages = 0;
-    if (!id) {
-        swal("Missing ID", "Please enter a manga ID from MangaDex", "error")
-        return;
-    }
-    if (!filePath) {
-        swal("Missing File Path", "Please choose a folder", "error")
-        return
-    }
-    if (!document.getElementById("lang").value) {
-        swal("Missing language", "Please enter a language e.g. English", "error")
-    }
-
-    Mangadex.getManga(id).then(({
-        manga,
-        chapter
-    }) => {
-        document.getElementById("name").style.display = "inherit";
-        var cover = manga.cover_url.replace("cdndex.com", "mangadex.org") //bad link in api, replace it with right
-        document.getElementById("cover").src = cover;
-        document.getElementById("name").innerHTML = manga.title
-        // document.getElementById("info").style.display = "initial"; //show info
-
-        if (document.getElementById("selop").options[document.getElementById("selop").selectedIndex].value == "all") {
-            running = true;
-
-            var chaps = []
-
-            for (var i = 0; i < chapter.length; i++) { //filters chapters to selected language
-                if (chapter[i].lang_name.toLowerCase() == document.getElementById("lang").value.toLowerCase()) {
-                    chaps.push(chapter[i])
-                }
-            }            
-            loop(chaps, filePath, manga)
-
-        } else if (document.getElementById("selop").options[document.getElementById("selop").selectedIndex].value == "ch") {
-            running = true;
-
-            let chapternum = document.getElementById('number').value
-            if (chapternum == 0) {
-                chapternum = 1;
-            }
-
-            if (!chapternum) {
-                swal("Missing chapter number", "Enter a number (e.g. 1) or range of chapter (e.g 1-5)", "error")
-                return
-            }
-            if (chapternum.includes("-")) {
-                let to = chapternum.substring(chapternum.indexOf('-') + 1);
-                let from = chapternum.substring(0, chapternum.indexOf('-'));
-                var chaps = []
-
-                for (var i = 0; i < chapter.length; i++) { //filters chapters to selected language
-                    if (chapter[i].lang_name.toLowerCase() == document.getElementById("lang").value.toLowerCase()) {
-                        chaps.push(chapter[i])
-                        console.log("Push success")
-                    }
-                }
-
-                let filchap = [];
-                for (var i = from - 1; i < to; i++) {
-                    filchap.push(chaps[i])
-                    console.log("Push success")
-
-                }
-                
-                loop(filchap, filePath, manga)
-                return;
-            } else {
-                var chaps = []
-                for (var i = 0; i < chapter.length; i++) { //filters chapters to selected language
-                    if (chapter[i].lang_name.toLowerCase() == document.getElementById("lang").value.toLowerCase()) {
-                        chaps.push(chapter[i])
-                        console.log("Push success")
-                    }
-                }
-                
-                let id = chaps[chapternum - 1].id
-                let group = chaps[0].group_name
-                let groupname = group.replace(/[/\\?%*:|"<>]/g, '')
-                Mangadex.getChapter(id).then(chapter => {
-                    
-                    chapter.page_array.forEach(function (link, index, array) {
-                        if (chapter.volume == "" && chapter.chapter == "") {
-                            dlChap("Unknown", chapter.title, link, index + 1, manga, filePath, groupname)
-                        } else if (chapter.volume == "" && chapter.volume !== "") {
-                            dlChap("Unknown", chapter.chapter, link, index + 1, manga, filePath, groupname)
-                        } else if (chapter.volume !== "" && chapter.volume == "") {
-                            dlChap(chapter.volume, chapter.title, link, index + 1, manga, filePath, groupname)
-                        } else {
-                            dlChap(chapter.volume, chapter.chapter, link, index + 1, manga, filePath, groupname)
-                        }
-                    }, );
-
-                })
-            }
-        }
-    }) //gets manga info
-
-
 }
