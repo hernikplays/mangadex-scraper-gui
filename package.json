@@ -6,8 +6,10 @@
   "dependencies": {
     "@sweetalert2/theme-dark": "^4.0.1",
     "axios": "^0.21.0",
+    "jquery": "^3.5.1",
     "mangadex-api": "^2.0.10",
     "minimist": "^1.2.5",
+    "node-fetch": "^2.6.1",
     "request": "^2.88.2",
     "sweetalert2": "^10.9.0"
   },

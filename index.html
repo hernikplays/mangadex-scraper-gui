@@ -11,17 +11,69 @@
 
 <body onload="checkVersion();">
     <div id="content">
+        <h1>MangaDex Scraper by hernikplays</h1>
         <div id="input">
-            <label for="dexlink">MangaDex manga URL</label><br>
+            <label for="dexlink">MangaDex Manga URL</label><br>
             <input type="url" name="dexlink" id="dexlink" placeholder="https://mangadex.org/title/40646/nega-kun-and-posi-chan"><br>
             <label for="lang">Language</label><br>
-            <input type="text" name="lang" id="lang" value="English"><br>
-            <button onclick="start()">Scrape</button>
+            <select data-placeholder="Choose a Language..." id="lang">
+                <option value="Arabic">Arabic</option>
+                <option value="Bengali">Bengali</option>
+                <option value="Bulgarian">Bulgarian</option>
+                <option value="Burmese">Burmese</option>
+                <option value="Catalan">Catalan</option>
+                <option value="Chinese (Simp)">Chinese (Simp)</option>
+                <option value="Chinese (Trad)">Chinese (Trad)</option>
+                <option value="Czech">Czech</option>
+                <option value="Danish">Danish</option>
+                <option value="Dutch">Dutch</option>
+                <option value="English" selected>English</option>
+                <option value="Finnish">Finnish</option>
+                <option value="French">French</option>
+                <option value="German">German</option>
+                <option value="Greek">Greek</option>
+                <option value="Hebrew">Hebrew</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Hungarian">Hungarian</option>
+                <option value="Indonesian">Indonesian</option>
+                <option value="Italian">Italian</option>
+                <option value="Japanese">Japanese</option>
+                <option value="Korean">Korean</option>
+                <option value="Lithuanian">Lithuanian</option>
+                <option value="Malay">Malay</option>
+                <option value="Mongolian">Mongolian</option>
+                <option value="Norwegian">Norwegian</option>
+                <option value="Other">Other</option>
+                <option value="Persian">Persian</option>
+                <option value="Polish">Polish</option>
+                <option value="Portuguese (Br)">Portuguese (Br)</option>
+                <option value="Portuguese (Pt)">Portuguese (Pt)</option>
+                <option value="Romanian">Romanian</option>
+                <option value="Russian">Russian</option>
+                <option value="Serbo-croatian">Serbo-croatian</option>
+                <option value="Slovak">Slovak</option>
+                <option value="Slovenian">Slovenian</option>
+                <option value="Spanish">Spanish</option>
+                <option value="Swedish ">Swedish </option>
+                <option value="Thai">Thai</option>
+                <option value="Turkish">Turkish</option>
+                <option value="Ukrainian">Ukrainian</option>
+                <option value="Vietnamese">Vietnamese</option>
+              </select>
+              <br>
+              <button onclick="getFolder()" style="width: 170px; height: 30px; font-size: 16px;">Set Download Folder</button>
+              <br>
+            <button onclick="start()">Get Chapters</button>
         </div>
         <div id="info">
             <img src="" id="cover" alt="Manga Cover">
             <h1 id="title"></h1>
         </div>
+        <div id="chapters">
+            
+        </div>
+        <p id="progress"></p>
+        <br>
     </div>
     <script src="assets/js/script.js"></script>
 </body>
