@@ -158,9 +158,10 @@ function scrape() {
     download(chapterIds)
 }
 
-function download(ids) {
+async function download(ids) {
     if (chapterNum <= ids.length) {
         chapterNum++
+        $("#progress").text("Downloading chapter number "+chapterNum)
         mangadex.getChapter(ids[chapterNum - 1]).then((chapter) => {
             let groupname = chapter.group_name.replace(/[/\\?%*:|"<>]/g, '')
             let dlpath = `${path}\\${mangaTitle}\\Vol. ${(chapter.volume == "" || chapter.volume == undefined)?"??":chapter.volume} Ch. ${(chapter.chapter == "" || chapter.chapter == undefined)?"??":chapter.chapter} - ${groupname}`
@@ -172,16 +173,24 @@ function download(ids) {
             }
             pagePos = 1
             console.log(chapter)
-            downloadChapter(chapter.page_array, dlpath)
+            await downloadChapter(chapter.page_array, dlpath)
         })
+    }
+    else{
+        $("#progress").text("Download complete!")
     }
 }
 
-function downloadChapter(pages, path) {
+async function downloadChapter(pages, path) {
     if (pagePos < pages.length) {
         setTimeout(() => {
             await downloadImage(pages[pagePos], path)
         }, 2000)
+    }
+    else{
+        return new Promise((resolve, reject) => {
+            resolve()
+        })
     }
 }
 
@@ -192,7 +201,7 @@ async function downloadImage(url, path) {
         method: 'GET',
         responseType: 'stream'
     })
-
+    console.log("downloading from "+url)
     response.data.pipe(writer)
     return new Promise((resolve, reject) => {
         writer.on('finish', resolve)
